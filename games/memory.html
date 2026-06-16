@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>تطابق الصور</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../Style.css">
+  <link rel="stylesheet" href="../Teams.css">
+
+</head>
+
+<body class="game-page">
+
+  <div class="back-bar">
+    <button class="back-btn" onclick="location.href='../index.html'">🏠 الرئيسية</button>
+
+    <div class="score-pills">
+      <span class="score-pill red-pill" id="scorePill1">الفريق الأول: 0</span>
+      <span class="score-pill blue-pill" id="scorePill2">الفريق الثاني: 0</span>
+    </div>
+  </div>
+
+  <section class="game-panel" id="memSection">
+    <div class="panel-inner">
+
+      <div class="mem-header">
+        <h3 class="panel-title">🃏 تطابق الصور</h3>
+
+        <div class="toggle-group">
+          <button class="toggle-btn active" type="button" data-lv="easy" onclick="setLevel('easy')">
+            سهلة · ٨
+          </button>
+
+          <button class="toggle-btn" type="button" data-lv="hard" onclick="setLevel('hard')">
+            صعبة · ١٦
+          </button>
+        </div>
+
+        <div class="mem-stats">
+          <div class="mstat">
+            <span id="memMoves">0</span>
+            <small>محاولات</small>
+          </div>
+
+          <div class="mstat">
+            <span id="memMatched">0</span>
+            <small>أزواج</small>
+          </div>
+
+          <div class="mstat">
+            <span id="memTime">00</span>
+            <small>ثانية</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="mem-grid easy" id="memGrid"></div>
+
+      <div class="mem-win" id="memWin">
+        <div class="win-sheep">🐑🎉🐑</div>
+        <p class="win-text">أحسنت! أكملت كل الأزواج</p>
+        <p class="win-sub" id="winTime"></p>
+        <p class="win-sub" id="winMoves"></p>
+      </div>
+
+      <div class="panel-actions">
+        <button class="act-btn primary" type="button" onclick="buildMemGrid(memLevel)">🔄 جولة جديدة</button>
+
+        <button class="act-btn red" type="button" id="memScoreBtnRed" onclick="memScore(1)">
+          +١ للفريق الأول
+        </button>
+
+        <button class="act-btn blue" type="button" id="memScoreBtnBlue" onclick="memScore(2)">
+          +١ للفريق الثاني
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+    /* =========================================================
+       MEMORY GAME
+       سهلة: 19, 8, 9, 10
+       صعبة: 11 إلى 18
+       كل صورة تتكرر مرتين عشوائيًا
+       ========================================================= */
+
+    var IMAGE_EXT = ".jpg";
+
+    var MEMORY_IMAGES = {
+      easy: ["19", "8", "9", "10"],
+      hard: ["11", "12", "13", "14", "15", "16", "17", "18"]
+    };
+
+    var scores = [0, 0];
+    var memLevel = "easy";
+    var memCards = [];
+    var firstCard = null;
+    var secondCard = null;
+    var lockBoard = false;
+    var memMoves = 0;
+    var memMatched = 0;
+    var memSeconds = 0;
+    var memTimer = null;
+    var timerStarted = false;
+
+    function getStoredTeamNames() {
+      try {
+        return JSON.parse(localStorage.getItem("eidTeamNames") || '["الفريق الأول","الفريق الثاني"]');
+      } catch (e) {
+        return ["الفريق الأول", "الفريق الثاني"];
+      }
+    }
+
+    function getTeamName(team) {
+      var names = getStoredTeamNames();
+
+      if (team === 1 || team === "red") {
+        return names[0] || "الفريق الأول";
+      }
+
+      if (team === 2 || team === "blue") {
+        return names[1] || "الفريق الثاني";
+      }
+
+      return "الفريق";
+    }
+
+    function loadData() {
+      try {
+        var savedScores = localStorage.getItem("eidScores");
+
+        if (savedScores) {
+          scores = JSON.parse(savedScores);
+        }
+      } catch (e) {
+        scores = [0, 0];
+      }
+
+      updateScoreText();
+      updateMemoryButtons();
+    }
+
+    function saveScores() {
+      localStorage.setItem("eidScores", JSON.stringify(scores));
+      updateScoreText();
+      updateMemoryButtons();
+    }
+
+    function updateScoreText() {
+      var scorePill1 = document.getElementById("scorePill1");
+      var scorePill2 = document.getElementById("scorePill2");
+
+      if (scorePill1) {
+        scorePill1.textContent = getTeamName(1) + ": " + scores[0];
+      }
+
+      if (scorePill2) {
+        scorePill2.textContent = getTeamName(2) + ": " + scores[1];
+      }
+    }
+
+    function updateMemoryButtons() {
+      var redBtn = document.getElementById("memScoreBtnRed");
+      var blueBtn = document.getElementById("memScoreBtnBlue");
+
+      if (redBtn) {
+        redBtn.textContent = "+١ لـ " + getTeamName(1);
+      }
+
+      if (blueBtn) {
+        blueBtn.textContent = "+١ لـ " + getTeamName(2);
+      }
+    }
+
+    function memScore(team) {
+      scores[team - 1]++;
+      saveScores();
+    }
+
+    function setLevel(level) {
+      memLevel = level;
+
+      document.querySelectorAll(".toggle-btn").forEach(function(btn) {
+        btn.classList.toggle("active", btn.dataset.lv === level);
+      });
+
+      buildMemGrid(level);
+    }
+
+    function buildMemGrid(level) {
+      memLevel = level || "easy";
+
+      clearInterval(memTimer);
+      memTimer = null;
+      timerStarted = false;
+
+      firstCard = null;
+      secondCard = null;
+      lockBoard = false;
+      memMoves = 0;
+      memMatched = 0;
+      memSeconds = 0;
+
+      updateStats();
+
+      var winBox = document.getElementById("memWin");
+      if (winBox) {
+        winBox.classList.remove("show");
+      }
+
+      var grid = document.getElementById("memGrid");
+      grid.className = "mem-grid " + memLevel;
+      grid.innerHTML = "";
+
+      var baseImages = MEMORY_IMAGES[memLevel] || MEMORY_IMAGES.easy;
+      memCards = [];
+
+      baseImages.forEach(function(imgName) {
+        var imageData = {
+          imgName: imgName,
+          src: "../images/" + imgName + IMAGE_EXT
+        };
+
+        memCards.push(imageData);
+        memCards.push({
+          imgName: imageData.imgName,
+          src: imageData.src
+        });
+      });
+
+      shuffleArray(memCards);
+
+      memCards.forEach(function(card, index) {
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "mem-card";
+        btn.dataset.index = index;
+        btn.dataset.img = card.imgName;
+
+        btn.innerHTML = `
+          <div class="mem-card-inner">
+            <div class="mem-card-face mem-card-back">؟</div>
+            <div class="mem-card-face mem-card-front">
+              <img src="${card.src}" alt="صورة ${card.imgName}" draggable="false">
+            </div>
+          </div>
+        `;
+
+        btn.addEventListener("click", function() {
+          flipCard(btn);
+        });
+
+        grid.appendChild(btn);
+      });
+    }
+
+    function flipCard(card) {
+      if (lockBoard) return;
+      if (card === firstCard) return;
+      if (card.classList.contains("flipped")) return;
+      if (card.classList.contains("matched")) return;
+
+      startTimer();
+
+      card.classList.add("flipped");
+
+      if (!firstCard) {
+        firstCard = card;
+        return;
+      }
+
+      secondCard = card;
+      lockBoard = true;
+      memMoves++;
+      updateStats();
+
+      var firstImg = firstCard.dataset.img;
+      var secondImg = secondCard.dataset.img;
+
+      if (firstImg === secondImg) {
+        handleMatch();
+      } else {
+        handleMismatch();
+      }
+    }
+
+    function handleMatch() {
+      firstCard.classList.add("matched");
+      secondCard.classList.add("matched");
+
+      firstCard.disabled = true;
+      secondCard.disabled = true;
+
+      memMatched++;
+      updateStats();
+
+      setTimeout(function() {
+        resetPick();
+      }, 250);
+
+      var totalPairs = MEMORY_IMAGES[memLevel].length;
+
+      if (memMatched === totalPairs) {
+        setTimeout(function() {
+          endMemoryGame();
+        }, 450);
+      }
+    }
+
+    function handleMismatch() {
+      firstCard.classList.add("wrong");
+      secondCard.classList.add("wrong");
+
+      setTimeout(function() {
+        if (firstCard) {
+          firstCard.classList.remove("flipped", "wrong");
+        }
+
+        if (secondCard) {
+          secondCard.classList.remove("flipped", "wrong");
+        }
+
+        resetPick();
+      }, 1000);
+    }
+
+    function resetPick() {
+      firstCard = null;
+      secondCard = null;
+      lockBoard = false;
+    }
+
+    function updateStats() {
+      var movesEl = document.getElementById("memMoves");
+      var matchedEl = document.getElementById("memMatched");
+      var timeEl = document.getElementById("memTime");
+
+      if (movesEl) {
+        movesEl.textContent = memMoves;
+      }
+
+      if (matchedEl) {
+        matchedEl.textContent = memMatched;
+      }
+
+      if (timeEl) {
+        timeEl.textContent = String(memSeconds).padStart(2, "0");
+      }
+    }
+
+    function startTimer() {
+      if (timerStarted) return;
+
+      timerStarted = true;
+
+      memTimer = setInterval(function() {
+        memSeconds++;
+        updateStats();
+      }, 1000);
+    }
+
+    function endMemoryGame() {
+      clearInterval(memTimer);
+      memTimer = null;
+
+      var winBox = document.getElementById("memWin");
+      var winTime = document.getElementById("winTime");
+      var winMoves = document.getElementById("winMoves");
+
+      if (winBox) {
+        winBox.classList.add("show");
+      }
+
+      if (winTime) {
+        winTime.textContent = "الوقت: " + memSeconds + " ثانية";
+      }
+
+      if (winMoves) {
+        winMoves.textContent = "المحاولات: " + memMoves;
+      }
+
+      if (winBox) {
+        winBox.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest"
+        });
+      }
+    }
+
+    function shuffleArray(array) {
+      for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+      }
+
+      return array;
+    }
+
+    window.addEventListener("load", function() {
+      loadData();
+      buildMemGrid("easy");
+    });
+  </script>
+
+</body>
+</html>

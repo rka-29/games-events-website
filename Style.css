@@ -1,0 +1,5873 @@
+/* ============================================
+   RESET & ROOT
+   ============================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --burg:    #7B1D35;
+  --burg-d:  #5C1228;
+  --burg-dd: #3D0A1A;
+  --gold:    #C9933A;
+  --gold2:   #E8B860;
+  --gold3:   #F5D898;
+  --gold4:   #FBF5E9;
+  --cream:   #F5F2F0;
+  --ink:     #2A1520;
+  --muted:   #8A7070;
+  --white:   #FFFFFF;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Tajawal', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  direction: rtl;
+  overflow-x: hidden;
+}
+
+/* ============================================
+   HERO — full bleed with optional bg image
+   ============================================ */
+.hero {
+  background: #3D0A1A;
+  position: relative;
+  overflow: hidden;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.hero-bg-img {
+  position: absolute;
+  inset: 0;
+  background-size: 60%;
+  background-position: left center;
+  background-repeat: no-repeat;
+  z-index: 0;
+  transition: opacity 0.4s;
+}
+/* dark overlay so text stays readable */
+.hero-overlay {
+  display: none;
+}
+
+.hero::before {
+  display: none !important;
+}
+.hero-gold-line {
+  width: 100%; height: 3px;
+  background: linear-gradient(90deg, transparent 0%, var(--gold) 30%, var(--gold2) 50%, var(--gold) 70%, transparent 100%);
+  position: absolute;
+  z-index: 2;
+}
+.hero-gold-line.top { top: 0; }
+.hero-gold-line.bot { bottom: 0; }
+
+.hero-body {
+  position: relative;
+  z-index: 2;
+  padding: 3rem 2rem;
+  width: 100%;
+  text-align: right;
+  padding-right: 6%;
+}
+
+.hero-sheep {
+  font-size: 6rem;
+  display: block;
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.5));
+  animation: sheepFloat 4s ease-in-out infinite;
+}
+@keyframes sheepFloat {
+  0%,100% { transform: translateY(0) rotate(-3deg); }
+  50%      { transform: translateY(-14px) rotate(3deg); }
+}
+
+.hero-tag {
+  display: inline-block;
+  border: 1px solid rgba(201,147,58,0.5);
+  color: var(--gold2);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  padding: 5px 18px;
+  border-radius: 50px;
+  margin-bottom: 1.2rem;
+  text-transform: uppercase;
+}
+
+.hero-h1 {
+  font-family: 'Amiri', serif;
+  font-size: clamp(2.6rem, 8vw, 5rem);
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.15;
+  margin-bottom: 0.8rem;
+  text-shadow: 0 4px 30px rgba(0,0,0,0.4);
+}
+.hero-h1 em {
+  color: var(--gold2);
+  font-style: normal;
+  display: block;
+}
+
+.hero-p {
+  font-size: 1rem;
+
+  margin-bottom: 2rem;
+  letter-spacing: 1px;
+  margin-top: 5rem;
+}
+
+.pills-row { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin-bottom: 0.5rem; }
+.pill {
+  font-size: 1.15rem;
+  font-weight: 900;
+  letter-spacing: 1px;
+  transition: opacity 0.2s;
+}
+.pill:hover { opacity: 0.8; }
+.pill-a {
+  color: #F5B8C8;
+  text-shadow: 0 2px 14px rgba(123,29,53,0.6);
+}
+.pill-b {
+  color: #E8D5A0;
+  text-shadow: 0 2px 14px rgba(201,147,58,0.6);
+}
+
+/* ============================================
+   GAME MENU
+   ============================================ */
+.menu-section {
+  padding: 4rem 1.5rem 2rem;
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.menu-eyebrow {
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 5px;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  opacity: 0.8;
+}
+
+.menu-h2 {
+  text-align: center;
+  font-family: 'Amiri', serif;
+  font-size: 2rem;
+  color: var(--burg);
+  margin-bottom: 2.5rem;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+/* each game button — tall portrait card */
+.menu-btn {
+  background: var(--white);
+  border: 1.5px solid rgba(201,147,58,0.2);
+  border-radius: 20px;
+  padding: 1.8rem 1rem 1.4rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Tajawal', sans-serif;
+}
+
+.menu-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--gold2));
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.menu-btn:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 48px rgba(74,14,32,0.15);
+  border-color: var(--gold);
+}
+.menu-btn:hover::after { opacity: 1; }
+.menu-btn.active { border-color: var(--gold); box-shadow: 0 8px 28px rgba(201,147,58,0.2); }
+.menu-btn.active::after { opacity: 1; }
+
+.menu-btn.highlight {
+  background: linear-gradient(160deg, var(--burg-d) 0%, var(--burg) 100%);
+  border-color: rgba(201,147,58,0.4);
+}
+.menu-btn.highlight .mb-num  { color: rgba(201,147,58,0.6); }
+.menu-btn.highlight .mb-name { color: var(--white); }
+.menu-btn.highlight .mb-tag  { background: rgba(201,147,58,0.2); color: var(--gold2); }
+.menu-btn.highlight::after { background: linear-gradient(90deg, var(--gold), var(--gold2)); }
+
+.mb-num {
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 3px;
+  color: rgba(201,147,58,0.5);
+  align-self: flex-start;
+}
+.mb-icon { font-size: 2.4rem; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.15)); }
+.mb-name {
+  font-size: 0.92rem;
+  font-weight: 900;
+  color: var(--ink);
+  text-align: center;
+  line-height: 1.3;
+}
+.mb-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 3px 12px;
+  border-radius: 20px;
+  background: var(--gold4);
+  color: var(--gold);
+  letter-spacing: 0.5px;
+  margin-top: auto;
+}
+
+/* ============================================
+   GAME PANELS
+   ============================================ */
+.game-panel {
+  display: none;
+  max-width: 920px;
+  margin: 0 auto 2rem;
+  padding: 0 1.5rem;
+  animation: panelIn 0.3s ease;
+}
+@keyframes panelIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.game-panel.open { display: block; }
+
+.panel-inner {
+  background: var(--white);
+  border-radius: 24px;
+  border: 1.5px solid rgba(201,147,58,0.2);
+  padding: 2rem;
+  box-shadow: 0 4px 24px rgba(74,14,32,0.07);
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid rgba(201,147,58,0.15);
+}
+.panel-icon-wrap {
+  width: 68px; height: 68px; border-radius: 20px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.4rem; flex-shrink: 0;
+}
+.panel-title {
+  font-family: 'Amiri', serif;
+  font-size: 1.5rem; font-weight: 700;
+  color: var(--burg); margin-bottom: 4px;
+}
+.panel-sub { font-size: 0.85rem; color: var(--muted); }
+
+.panel-steps {
+  list-style: none;
+  display: flex; flex-direction: column; gap: 12px;
+  margin-bottom: 1.4rem;
+}
+.panel-steps li {
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.step-n {
+  min-width: 30px; height: 30px; border-radius: 50%;
+  background: var(--burg);
+  color: var(--gold2);
+  font-size: 0.8rem; font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+.step-txt { font-size: 0.93rem; color: var(--ink); line-height: 1.75; padding-top: 5px; }
+
+.panel-tip {
+  background: var(--gold4);
+  border-right: 3px solid var(--gold);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 0.88rem; color: #5A1A28; line-height: 1.7;
+}
+
+/* ============================================
+   MEMORY GAME
+   ============================================ */
+.mem-header { text-align: center; margin-bottom: 1.4rem; }
+.mem-header .panel-title { margin-bottom: 1rem; }
+
+.toggle-group {
+  display: inline-flex;
+  background: var(--cream);
+  border-radius: 50px;
+  padding: 4px;
+  gap: 4px;
+  border: 1px solid rgba(201,147,58,0.2);
+  margin-bottom: 1rem;
+}
+.toggle-btn {
+  padding: 7px 22px; border-radius: 50px; border: none;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 0.88rem; font-weight: 700; cursor: pointer;
+  transition: all 0.15s; color: var(--muted); background: transparent;
+}
+.toggle-btn.active { background: var(--burg); color: white; }
+.toggle-btn:hover:not(.active) { color: var(--burg); }
+
+.mem-stats {
+  display: flex; justify-content: center; gap: 1.2rem; flex-wrap: wrap;
+}
+.mstat {
+  display: flex; flex-direction: column; align-items: center;
+  background: var(--gold4); border-radius: 14px;
+  padding: 10px 22px; border: 1px solid rgba(201,147,58,0.2);
+}
+.mstat span { font-size: 1.6rem; font-weight: 900; color: var(--burg); line-height: 1; }
+.mstat small { font-size: 0.7rem; color: var(--muted); margin-top: 3px; }
+
+.mem-grid { display: grid; gap: 10px; max-width: 500px; margin: 1.4rem auto; }
+.mem-grid.easy { grid-template-columns: repeat(4, 1fr); }
+.mem-grid.hard { grid-template-columns: repeat(4, 1fr); }
+
+.mem-card {
+  aspect-ratio: 1; border-radius: 14px; cursor: pointer;
+  position: relative; transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(.4,0,.2,1);
+}
+.mem-card.flipped { transform: rotateY(180deg); }
+.mem-card.matched  { transform: rotateY(180deg); pointer-events: none; }
+
+.card-back, .card-front {
+  position: absolute; inset: 0; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+}
+.card-back {
+  background: linear-gradient(140deg, var(--burg-d), var(--burg));
+  border: 2px solid rgba(201,147,58,0.3);
+}
+.card-back .q-mark {
+  font-family: 'Amiri', serif; font-size: 1.8rem;
+  color: rgba(201,147,58,0.55);
+}
+.card-front {
+  transform: rotateY(180deg);
+  background: var(--gold4);
+  border: 2px solid transparent;
+  overflow: hidden;
+  padding: 6px;
+}
+/* صورة داخل الكرت */
+.mem-card-img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
+.mem-card.matched .card-front { background: #FFF0D0; border-color: var(--gold); animation: pop .4s ease; }
+.mem-card.wrong   .card-front { background: #FFF0F0; border-color: #CC2020; animation: shake .35s ease; }
+
+@keyframes pop   { 0%,100%{transform:rotateY(180deg) scale(1)} 50%{transform:rotateY(180deg) scale(1.13)} }
+@keyframes shake { 0%,100%{transform:rotateY(180deg) translateX(0)} 25%{transform:rotateY(180deg) translateX(-7px)} 75%{transform:rotateY(180deg) translateX(7px)} }
+
+.mem-win {
+  text-align: center; background: var(--gold4);
+  border: 1.5px solid rgba(201,147,58,0.35);
+  border-radius: 16px; padding: 1.4rem;
+  margin-top: 1.2rem; display: none; animation: panelIn .3s ease;
+}
+.mem-win.show { display: block; }
+.win-sheep { font-size: 2rem; margin-bottom: 6px; }
+.win-text { font-family: 'Amiri', serif; font-size: 1.2rem; color: var(--burg); font-weight: 700; }
+.win-sub  { font-size: 0.85rem; color: var(--muted); margin-top: 4px; }
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+.panel-actions {
+  display: flex; justify-content: center;
+  gap: 10px; flex-wrap: wrap; margin-top: 1.4rem;
+}
+
+.act-btn {
+  padding: 10px 24px; border-radius: 50px; border: none;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 0.9rem; font-weight: 700;
+  cursor: pointer; transition: all 0.15s;
+}
+.act-btn.primary { background: var(--burg); color: white; }
+.act-btn.primary:hover { background: var(--burg-d); }
+.act-btn.gold  { background: var(--gold); color: white; }
+.act-btn.gold:hover { background: var(--gold2); color: #2A1F00; }
+.act-btn.red   { background: #c8960a; color: white; }
+.act-btn.red:hover { background: #a87a08; }
+.act-btn.blue  { background: #8B6914; color: white; }
+.act-btn.blue:hover { background: #6b5010; }
+.act-btn.ghost { background: transparent; border: 1.5px solid rgba(212,160,23,0.3); color: var(--muted); }
+.act-btn.ghost:hover { border-color: var(--gold); color: var(--burg); }
+
+/* ============================================
+   HONEYCOMB GAME
+   ============================================ */
+.hex-header { text-align: center; margin-bottom: 1.2rem; }
+.hex-dir-row { display: flex; justify-content: center; gap: 12px; margin: 8px 0; flex-wrap: wrap; }
+.dir-tag {
+  font-size: 0.8rem; font-weight: 700; padding: 4px 14px;
+  border-radius: 50px;
+}
+.red-dir  { background: #FDF8E0; color: #8B6914; border: 1px solid #E8D080; }
+.blue-dir { background: #FDF8E0; color: #5C4500; border: 1px solid #E8D080; }
+
+.turn-badge {
+  display: inline-block; font-size: 0.95rem; font-weight: 700;
+  padding: 7px 24px; border-radius: 50px;
+}
+.turn-badge.red  { background: #FDF8E0; color: #8B6914; border: 1.5px solid #D4A017; }
+.turn-badge.blue { background: #F5ECC0; color: #5C4500; border: 1.5px solid #B8860B; }
+
+.hex-qbox {
+  background: var(--gold4); border: 1.5px solid rgba(201,147,58,0.3);
+  border-radius: 18px; padding: 1.4rem 1.6rem;
+  text-align: center; margin-bottom: 1.4rem; display: none;
+  animation: panelIn .2s ease;
+}
+.hex-qletter {
+  width: 50px; height: 50px; border-radius: 50%;
+  background: var(--burg); color: var(--gold2);
+  font-family: 'Amiri', serif; font-size: 1.6rem; font-weight: 700;
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-bottom: 0.8rem;
+}
+.hex-qtext {
+  font-size: 1.05rem; font-weight: 700; color: var(--ink);
+  line-height: 1.65; margin-bottom: 0.8rem;
+}
+.hex-qanswer {
+  font-size: 0.92rem; font-weight: 700; color: var(--burg-d);
+  background: #FFF0CC; padding: 7px 16px; border-radius: 10px;
+  display: none; margin-bottom: 0.8rem;
+}
+.hex-qbtns { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+
+.hex-wrap {
+  position: relative;
+  max-width: 540px; margin: 0 auto 1.2rem;
+  padding: 30px 50px;
+}
+.hex-edge {
+  position: absolute; font-size: 0.7rem; font-weight: 800;
+  white-space: nowrap;
+}
+.top-edge  { top: 6px;   left: 50%; transform: translateX(-50%); color: #2878CC; }
+.bot-edge  { bottom: 6px; left: 50%; transform: translateX(-50%); color: #2878CC; }
+.right-edge { right: 6px; top: 50%; transform: translateY(-50%); color: #CC2828; writing-mode: vertical-rl; }
+.left-edge  { left: 6px;  top: 50%; transform: translateY(-50%); color: #CC2828; writing-mode: vertical-rl; }
+
+.hex-row {
+  display: flex; justify-content: center;
+  gap: 3px; margin-bottom: -9px;
+}
+.hex-cell {
+  width: 56px; height: 62px; flex-shrink: 0;
+  clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  background: var(--gold4);
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.15s, filter 0.15s;
+}
+.hex-cell:hover:not(.owned-red):not(.owned-blue) { transform: scale(1.08); filter: brightness(0.9); }
+.hex-cell.owned-red  { background: #CC2828; }
+.hex-cell.owned-blue { background: #2878CC; }
+
+.hex-inner {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.hex-letter {
+  font-family: 'Amiri', serif;
+  font-size: 1.1rem; font-weight: 700;
+  color: var(--burg); user-select: none;
+}
+.owned-red  .hex-letter,
+.owned-blue .hex-letter { color: white; }
+
+.hex-win {
+  background: var(--gold4); border: 1.5px solid rgba(201,147,58,0.35);
+  border-radius: 16px; padding: 1.2rem; text-align: center;
+  margin-bottom: 1rem; display: none; animation: panelIn .3s ease;
+}
+.hex-win-text {
+  font-family: 'Amiri', serif; font-size: 1.3rem;
+  color: var(--burg); font-weight: 700;
+}
+
+/* ============================================
+   SCOREBOARD
+   ============================================ */
+.score-section {
+  background: linear-gradient(140deg, var(--burg-dd) 0%, var(--burg-d) 50%, #5A1025 100%);
+  padding: 3rem 1.5rem;
+  position: relative; overflow: hidden;
+}
+.score-section::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 15% 50%, rgba(201,147,58,0.18) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 50%, rgba(201,147,58,0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.score-inner { max-width: 700px; margin: 0 auto; position: relative; z-index: 1; }
+.score-top-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 2rem;
+}
+.score-title {
+  font-family: 'Amiri', serif; font-size: 1.5rem;
+  color: var(--gold2);
+}
+.ghost-btn {
+  background: transparent; border: 1px solid rgba(201,147,58,0.35);
+  color: rgba(245,223,160,0.6);
+  font-family: 'Tajawal', sans-serif; font-size: 0.82rem;
+  padding: 6px 16px; border-radius: 20px; cursor: pointer; transition: all .15s;
+}
+.ghost-btn:hover { border-color: var(--gold); color: var(--gold2); background: rgba(201,147,58,0.1); }
+
+.score-teams {
+  display: grid; grid-template-columns: 1fr auto 1fr;
+  gap: 20px; align-items: center;
+}
+.vs-badge {
+  font-family: 'Amiri', serif; font-size: 1.8rem;
+  color: rgba(201,147,58,0.4); text-align: center;
+}
+
+.score-team {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(201,147,58,0.15);
+  border-radius: 20px; padding: 1.6rem 1rem;
+  text-align: center; transition: all .2s;
+}
+.score-team.leading {
+  border-color: rgba(201,147,58,0.5);
+  background: rgba(201,147,58,0.08);
+  box-shadow: 0 0 40px rgba(201,147,58,0.12);
+}
+.st-emoji { font-size: 2rem; margin-bottom: 6px; }
+.st-label { font-size: 0.82rem; color: rgba(253,245,224,0.45); margin-bottom: 10px; font-weight: 600; }
+.st-num {
+  font-size: 4.5rem; font-weight: 900; line-height: 1;
+  margin-bottom: 14px; font-family: 'Tajawal', sans-serif;
+}
+.red-num  { color: #D4A017; }
+.blue-num { color: #F0C040; }
+
+.st-controls { display: flex; justify-content: center; gap: 10px; }
+.ctrl-btn {
+  width: 38px; height: 38px; border-radius: 50%;
+  border: 1px solid rgba(201,147,58,0.2);
+  background: rgba(201,147,58,0.07);
+  color: rgba(253,245,224,0.85);
+  font-size: 1.2rem; font-weight: 700; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .15s; font-family: inherit;
+}
+.ctrl-btn:hover { background: rgba(201,147,58,0.18); }
+
+.st-crown { min-height: 24px; margin-top: 8px; text-align: center; }
+.crown-tag {
+  display: inline-block; font-size: 0.72rem; font-weight: 700;
+  padding: 3px 12px; border-radius: 20px;
+  background: rgba(201,147,58,0.2); color: var(--gold2); letter-spacing: .5px;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+.site-footer {
+  background: var(--burg-dd);
+  text-align: center; padding: 1.5rem 1rem;
+  font-family: 'Amiri', serif;
+  font-size: 1rem; color: rgba(201,147,58,0.5);
+  border-top: 1px solid rgba(201,147,58,0.15);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 600px) {
+  .menu-grid { grid-template-columns: repeat(2, 1fr); }
+  .score-teams { grid-template-columns: 1fr; gap: 12px; }
+  .vs-badge { display: none; }
+  .st-num { font-size: 3.2rem; }
+  .hex-cell { width: 40px !important; height: 46px !important; }
+  .hex-letter { font-size: 0.85rem !important; }
+  .hex-wrap { padding: 28px 36px; }
+  .hero-sheep { font-size: 4.5rem; }
+}
+@media (max-width: 400px) {
+  .menu-grid { grid-template-columns: 1fr; }
+}
+
+/* ============================================
+   SECRET NUMBER GAME
+   ============================================ */
+.sg-setup, .sg-play {
+  display: flex; flex-direction: column; align-items: center; gap: 1.2rem;
+}
+.sg-setup-label {
+  font-family: 'Amiri', serif; font-size: 1.3rem;
+  color: var(--burg); font-weight: 700; text-align: center;
+}
+.sg-setup-hint {
+  font-size: 0.82rem; color: var(--muted); text-align: center;
+}
+
+/* 4 SLOTS */
+.sg-slots {
+  display: flex; gap: 12px; justify-content: center;
+  margin: 0.5rem 0;
+}
+.sg-slot {
+  width: 60px; height: 72px;
+  border-radius: 16px;
+  border: 2.5px solid rgba(201,147,58,0.3);
+  background: var(--gold4);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 2rem; font-weight: 900;
+  color: var(--ink);
+  transition: all 0.15s;
+}
+.sg-slot.sg-active {
+  border-color: var(--burg);
+  box-shadow: 0 0 0 3px rgba(123,31,58,0.15);
+  background: white;
+}
+.sg-slot.sg-filled { color: var(--burg); background: white; border-color: rgba(201,147,58,0.4); }
+.sg-slot.sg-correct { background: #D4F5D0; border-color: #2A8A2A; color: #1A5A1A; animation: popSlot .35s ease; }
+.sg-slot.sg-wrong   { background: #FFD0D0; border-color: #CC2828; color: #8A1010; animation: shakeSlot .35s ease; }
+
+@keyframes popSlot   { 0%,100%{transform:scale(1)} 50%{transform:scale(1.12)} }
+@keyframes shakeSlot { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+@keyframes confettiFly { 0%{transform:translateY(0) scale(1);opacity:1} 100%{transform:translateY(-80px) scale(0.5);opacity:0} }
+
+/* NUMPAD */
+.sg-numpad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  max-width: 260px; width: 100%;
+}
+.sg-key {
+  height: 54px; border-radius: 14px;
+  border: 1.5px solid rgba(201,147,58,0.2);
+  background: white;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 1.3rem; font-weight: 700;
+  color: var(--ink); cursor: pointer;
+  transition: all 0.12s;
+  box-shadow: 0 2px 6px rgba(74,14,32,0.06);
+}
+.sg-key:hover      { background: var(--gold4); border-color: var(--gold); transform: scale(1.04); }
+.sg-key:active     { transform: scale(0.96); }
+.sg-key-del        { background: #FFF0F0; color: #CC2828; border-color: #FFCCCC; }
+.sg-key-confirm    { background: var(--burg); color: white; border-color: var(--burg); }
+.sg-key-confirm:hover { background: var(--burg-d); }
+
+.sg-err {
+  font-size: 0.82rem; color: #CC2828; font-weight: 600;
+  min-height: 20px; text-align: center;
+}
+
+/* GUESS AREA */
+.sg-guess-area { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+.sg-guess-label { font-size: 0.9rem; color: var(--muted); font-weight: 600; text-align: center; }
+
+/* LOG */
+.sg-log {
+  width: 100%; max-height: 280px; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 4px 0;
+}
+.sg-log-row {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--cream); border-radius: 12px;
+  padding: 8px 14px; border: 1px solid rgba(201,147,58,0.15);
+}
+.sg-log-num {
+  font-size: 0.7rem; font-weight: 900; color: var(--muted);
+  min-width: 20px;
+}
+.sg-log-digits { display: flex; gap: 6px; flex: 1; justify-content: center; }
+.sg-log-digit {
+  width: 38px; height: 42px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; font-weight: 900;
+  transition: all 0.2s;
+}
+.sg-d-green  { background: #D4F5D0; color: #1A5A1A; border: 1.5px solid #2A8A2A; }
+.sg-d-red    { background: #FFD0D0; color: #8A1010; border: 1.5px solid #CC2828; }
+.sg-d-yellow { background: #FFF3C0; color: #6A5000; border: 1.5px solid #C09000; }
+
+.sg-log-hints { display: flex; flex-direction: column; gap: 2px; font-size: 0.75rem; font-weight: 700; }
+.hint-green  { color: #1A5A1A; }
+.hint-yellow { color: #6A5000; }
+
+/* RESULT */
+.sg-result { width: 100%; }
+.sg-win, .sg-lose {
+  text-align: center; padding: 1rem 1.4rem;
+  border-radius: 14px; font-size: 1rem; font-weight: 700;
+  font-family: 'Amiri', serif; font-size: 1.15rem;
+}
+.sg-win  { background: #D4F5D0; color: #1A5A1A; border: 1.5px solid #2A8A2A; }
+.sg-lose { background: #FFD0D0; color: #8A1010; border: 1.5px solid #CC2828; }
+
+.sg-bottom-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+
+/* ============================================
+   TEAM NAME MODAL
+   ============================================ */
+.team-modal {
+  position: fixed; inset: 0; z-index: 999;
+  background: rgba(30, 8, 16, 0.82);
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.5rem;
+  backdrop-filter: blur(6px);
+}
+
+.team-modal-box {
+  background: var(--white);
+  border-radius: 28px;
+  padding: 2.5rem 2rem;
+  max-width: 420px; width: 100%;
+  text-align: center;
+  border: 1.5px solid rgba(201,147,58,0.3);
+  box-shadow: 0 24px 80px rgba(30,8,16,0.4);
+  animation: panelIn 0.3s ease;
+}
+
+.tm-title {
+  font-family: 'Amiri', serif;
+  font-size: 1.6rem; font-weight: 700;
+  color: var(--burg); margin-bottom: 6px;
+}
+.tm-sub {
+  font-size: 0.83rem; color: var(--muted);
+  margin-bottom: 1.8rem;
+}
+
+.tm-field {
+  margin-bottom: 1.2rem; text-align: right;
+}
+.tm-label {
+  display: block; font-size: 0.85rem; font-weight: 700;
+  color: var(--muted); margin-bottom: 6px;
+}
+.tm-input {
+  width: 100%; padding: 13px 16px;
+  border-radius: 14px;
+  border: 1.5px solid rgba(201,147,58,0.3);
+  background: var(--gold4);
+  font-family: 'Tajawal', sans-serif;
+  font-size: 1rem; font-weight: 700;
+  color: var(--ink); outline: none;
+  transition: border-color 0.15s;
+  text-align: right;
+}
+.tm-input:focus { border-color: var(--burg); background: white; }
+
+.tm-save {
+  width: 100%; margin-top: 0.5rem;
+  padding: 14px; font-size: 1rem;
+  border-radius: 14px;
+}
+
+/* change teams button in hero */
+.change-teams-btn {
+  margin-top: 1.2rem;
+  background: rgba(201,147,58,0.15);
+  border: 1px solid rgba(201,147,58,0.35);
+  color: var(--gold3);
+  font-family: 'Tajawal', sans-serif;
+  font-size: 0.82rem; font-weight: 700;
+  padding: 7px 20px; border-radius: 50px;
+  cursor: pointer; transition: all 0.15s;
+  display: block; margin-left: auto; margin-right: auto;
+}
+.change-teams-btn:hover {
+  background: rgba(201,147,58,0.25);
+  border-color: var(--gold);
+  color: var(--gold2);
+}
+
+/* ============================================
+   MAFIA GAME
+   ============================================ */
+.mafia-step-label {
+  text-align: center;
+  font-family: 'Amiri', serif;
+  font-size: 1.1rem; color: var(--burg);
+  font-weight: 700; margin-bottom: 1.2rem;
+}
+
+.mafia-count-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 1.5rem; margin-bottom: 1.2rem;
+}
+.mafia-count-btn {
+  width: 48px; height: 48px; border-radius: 50%;
+  border: 2px solid var(--gold);
+  background: var(--gold4); color: var(--burg);
+  font-size: 1.6rem; font-weight: 900;
+  cursor: pointer; transition: all 0.15s;
+  display: flex; align-items: center; justify-content: center;
+}
+.mafia-count-btn:hover { background: var(--gold); color: white; }
+.mafia-count-num {
+  font-size: 3.5rem; font-weight: 900;
+  color: var(--burg); font-family: 'Tajawal', sans-serif;
+  min-width: 80px; text-align: center; line-height: 1;
+}
+
+.mafia-roles-preview { text-align: center; margin-bottom: 1.6rem; }
+.role-preview-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.role-chip {
+  padding: 6px 16px; border-radius: 50px;
+  font-size: 0.85rem; font-weight: 700;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+.mafia-start-btn { display: block; margin: 0 auto; padding: 12px 40px; font-size: 1rem; }
+
+/* CARD */
+.mafia-card-wrap {
+  display: flex; justify-content: center;
+  margin: 1rem auto 1.2rem; max-width: 320px;
+}
+
+.mafia-card {
+  width: 220px; height: 300px;
+  border-radius: 24px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+  border: 2.5px solid rgba(201,147,58,0.3);
+}
+.mafia-card:hover { transform: scale(1.03); }
+
+.mafia-card.back {
+  background: linear-gradient(140deg, var(--burg-d), var(--burg));
+  border-color: rgba(201,147,58,0.4);
+}
+.mafia-card-back-inner {
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+}
+.mafia-card-icon-back { font-size: 3.5rem; }
+.mafia-card-back-txt {
+  color: rgba(245,224,160,0.7); font-size: 0.9rem;
+  font-weight: 700; text-align: center; padding: 0 1rem;
+}
+
+.mafia-card.front {
+  flex-direction: column;
+  border-width: 2.5px;
+}
+.mafia-card-front-inner {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 14px; padding: 1.5rem;
+  text-align: center;
+}
+.mafia-role-icon {
+  width: 80px; height: 80px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.4rem; border: 2px solid currentColor;
+}
+.mafia-role-label {
+  font-family: 'Amiri', serif;
+  font-size: 1.8rem; font-weight: 700;
+}
+.mafia-role-desc {
+  font-size: 0.85rem; color: var(--muted);
+  line-height: 1.6;
+}
+
+.mafia-card-btns {
+  display: flex; justify-content: center; margin-bottom: 1rem;
+}
+
+.mafia-done {
+  text-align: center; padding: 1.5rem;
+  background: var(--gold4); border-radius: 16px;
+  border: 1.5px solid var(--border);
+}
+.mafia-done-text {
+  font-family: 'Amiri', serif;
+  font-size: 1.3rem; color: var(--burg); font-weight: 700; margin-bottom: 6px;
+}
+.mafia-done-sub { font-size: 0.88rem; color: var(--muted); margin-bottom: 1rem; }
+
+/* ============================================
+   VIDEO GAME
+   ============================================ */
+.vid-progress-row {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 1.2rem;
+}
+.vid-prog-lbl {
+  font-size: 0.8rem; font-weight: 700;
+  color: var(--muted); white-space: nowrap;
+  min-width: 80px;
+}
+.vid-prog-bar {
+  flex: 1; height: 6px; border-radius: 6px;
+  background: rgba(201,147,58,0.15);
+  overflow: hidden;
+}
+.vid-prog-fill {
+  height: 100%; border-radius: 6px;
+  background: linear-gradient(90deg, var(--burg), var(--gold));
+  transition: width 0.4s ease;
+}
+
+.vid-question-box {
+  background: var(--gold4);
+  border: 1.5px solid rgba(201,147,58,0.3);
+  border-right: 4px solid var(--gold);
+  border-radius: 14px;
+  padding: 14px 18px;
+  margin-bottom: 1.2rem;
+}
+.vid-question-text {
+  font-family: 'Amiri', serif;
+  font-size: 1.15rem; font-weight: 700;
+  color: var(--burg); line-height: 1.5;
+}
+
+.vid-player-wrap {
+  border-radius: 18px; overflow: hidden;
+  background: #000;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 8px 32px rgba(74,14,32,0.2);
+}
+.vid-player {
+  width: 100%; display: block;
+  max-height: 420px;
+  border-radius: 18px;
+}
+
+.vid-actions { display: flex; flex-direction: column; gap: 10px; align-items: center; }
+.vid-team-score-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.vid-next-btn { min-width: 200px; font-size: 1rem; padding: 12px 32px; }
+
+.vid-done {
+  text-align: center; padding: 2rem 1rem;
+  background: var(--gold4); border-radius: 16px;
+  border: 1.5px solid var(--border);
+}
+.vid-done-emoji { font-size: 2.5rem; margin-bottom: 8px; }
+.vid-done-text  { font-family: 'Amiri', serif; font-size: 1.3rem; color: var(--burg); font-weight: 700; margin-bottom: 1rem; }
+/* ===== Eid pastel override ===== */
+:root {
+  --pink:   #f6a9c9;
+  --blue:   #8fd3ff;
+  --yellow: #f6d86b;
+  --red:    #7B1D35;
+  --soft-bg:#FFFFFF;
+  --ink:    #5b3b3b;
+  --white:  #ffffff;
+
+  /* ربط المتغيرات القديمة بالجديدة */
+  --burg:   #f6a9c9;
+  --burg-d: #e88bb3;
+  --burg-dd:#d96b9a;
+  --gold:   #f6d86b;
+  --gold2:  #ffd95e;
+  --gold3:  #fff0a6;
+  --gold4:  #fffaf0;
+  --cream:  #FFFFFF;
+  --muted:  #8a6a6a;
+}
+
+body {
+  background: linear-gradient(180deg, #fffdfd 0%, #fff8ef 100%);
+  color: var(--ink);
+}
+
+/* الهيدر الرئيسي */
+.hero {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(246,169,201,0.20) 0%,
+      rgba(143,211,255,0.20) 35%,
+      rgba(246,216,107,0.18) 70%,
+      rgba(123,29,53,0.14) 100%
+    ),
+    #FFFFFF;
+}
+
+/* إزالة أي طبقة تغميق */
+.hero-overlay,
+.hero::before {
+  display: none !important;
+}
+
+.hero-bg-img {
+  opacity: 1;
+  filter: none;
+  background-size: 48%;
+  background-position: left center;
+}
+
+/* خطوط الزينة */
+.hero-gold-line {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #f6a9c9 20%,
+    #8fd3ff 45%,
+    #f6d86b 70%,
+    #7B1D35 90%,
+    transparent 100%
+  );
+}
+
+.hero-tag {
+  background: rgba(255,255,255,0.65);
+  color: #d96b9a;
+  border: 1px solid rgba(246,169,201,0.45);
+}
+
+.hero-h1 {
+  color: #5b3b3b;
+  text-shadow: none;
+}
+
+.hero-h1 em {
+  color: #7B1D35;
+}
+
+.hero-p {
+  color: #7a5d66;
+}
+
+.pill-a {
+  color: #7B1D35;
+  text-shadow: none;
+}
+.pill-b {
+  color: #4f93c2;
+  text-shadow: none;
+}
+
+/* الأزرار والكروت */
+.menu-h2 {
+  color: #d96b9a;
+}
+
+.menu-btn {
+  border: 1.5px solid rgba(246,169,201,0.22);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.04);
+}
+
+.menu-btn:hover,
+.menu-btn.active {
+  border-color: #f6a9c9;
+  box-shadow: 0 14px 30px rgba(246,169,201,0.18);
+}
+
+.menu-btn::after {
+  background: linear-gradient(90deg, #f6a9c9, #8fd3ff, #f6d86b, #7B1D35);
+}
+
+.menu-btn.highlight {
+  background: linear-gradient(135deg, #ffe6f0 0%, #e8f7ff 100%);
+  border-color: rgba(143,211,255,0.35);
+}
+
+.menu-btn.highlight .mb-name {
+  color: #5b3b3b;
+}
+
+.menu-btn.highlight .mb-tag {
+  background: rgba(255,255,255,0.7);
+  color: #d96b9a;
+}
+
+.act-btn.primary {
+  background: #7B1D35;
+  color: #fff;
+}
+.act-btn.primary:hover {
+  background: #e75f5f;
+}
+
+.act-btn.gold {
+  background: #f6d86b;
+  color: #5b3b3b;
+}
+.act-btn.gold:hover {
+  background: #f2cf4b;
+}
+
+.act-btn.red {
+  background: #f6a9c9;
+  color: #fff;
+}
+.act-btn.red:hover {
+  background: #eb91b7;
+}
+
+.act-btn.blue {
+  background: #8fd3ff;
+  color: #2f5568;
+}
+.act-btn.blue:hover {
+  background: #74c6fb;
+}
+
+.act-btn.ghost {
+  border: 1.5px solid rgba(246,169,201,0.35);
+  color: #8a6a6a;
+}
+
+.red-dir,
+.turn-badge.red {
+  background: #fff1f1;
+  color: #c65555;
+  border-color: #7B1D35;
+}
+
+.blue-dir,
+.turn-badge.blue {
+  background: #eef8ff;
+  color: #4f93c2;
+  border-color: #8fd3ff;
+}
+/* ====== BACK BAR ====== */
+.back-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 0.4rem 0.9rem;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.back-btn:hover {
+  background: #eee;
+}
+
+.score-pills {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.score-pill {
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.red-pill  { background: #F9EEF1; color: #7B1D35; }
+.blue-pill { background: #FBF5E9; color: #8B5E1A; }
+
+/* ====== GAME PANEL ALWAYS VISIBLE ====== */
+.game-panel {
+  display: block !important;
+}
+/* =========================================================
+   EID PASTEL MODERN REDESIGN
+   الصقي هذا الكود في آخر Style.css
+   ========================================================= */
+
+:root {
+  --eid-bg: #fffaf0;
+  --eid-paper: #FFFFFF;
+  --eid-paper-2: #fbf3e7;
+  --eid-ink: #28574d;
+  --eid-muted: #73867b;
+  --eid-sage: #C9933A;
+  --eid-sage-dark: #5f8f7d;
+  --eid-mint: #dcefe6;
+  --eid-coral: #f49a91;
+  --eid-coral-dark: #e4776f;
+  --eid-pink: #f8c8c2;
+  --eid-gold: #d9a84e;
+  --eid-gold-soft: #f7dfae;
+  --eid-line: rgba(217, 168, 78, .28);
+  --eid-shadow: 0 18px 48px rgba(84, 61, 31, .12);
+  --eid-shadow-soft: 0 10px 24px rgba(84, 61, 31, .08);
+
+  --burg: #5C1228;
+  --burg-d: #7aa592;
+  --burg-dd: #426f63;
+  --gold: #C9933A;
+  --gold2: #edc777;
+  --gold3: #fae9c7;
+  --gold4: #fff6e8;
+  --cream: var(--eid-bg);
+  --ink: #2A1520;
+  --muted: #8A7070;
+  --white: var(--eid-paper);
+}
+
+html {
+  background: var(--eid-bg);
+}
+
+body {
+  background:
+    radial-gradient(circle at 8% 10%, rgba(201,147,58,.20), transparent 26rem),
+    radial-gradient(circle at 94% 8%, rgba(201,147,58,.25), transparent 22rem),
+    linear-gradient(180deg, #FFFFFF 0%, #fff7ea 48%, #fffaf0 100%);
+  color: #2A1520;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: .45;
+  background-image:
+    radial-gradient(circle, rgba(217,168,78,.35) 1px, transparent 1.5px),
+    linear-gradient(135deg, rgba(201,147,58,.10) 25%, transparent 25%),
+    linear-gradient(45deg, rgba(201,147,58,.08) 25%, transparent 25%);
+  background-size: 52px 52px, 90px 90px, 90px 90px;
+  mask-image: linear-gradient(180deg, #000 0%, transparent 82%);
+  z-index: -1;
+}
+
+/* ================= HERO ================= */
+
+.hero {
+  min-height: 88dvh;
+  height: auto;
+  padding: 3.5rem 1.25rem 4.5rem;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 18% 62%, rgba(201,147,58,.18), transparent 20rem),
+    radial-gradient(circle at 78% 18%, rgba(201,147,58,.24), transparent 22rem),
+    linear-gradient(135deg, #FFFFFF 0%, #fff7ea 100%);
+  isolation: isolate;
+}
+
+.hero::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute;
+  inset: 2rem 4vw auto;
+  height: min(72dvh, 560px);
+  border-radius: 48% 52% 35% 35% / 22% 22% 44% 44%;
+  background:
+    linear-gradient(#fffaf1, #FFFFFF) padding-box,
+    linear-gradient(135deg, rgba(217,168,78,.34), rgba(201,147,58,.20), rgba(201,147,58,.22)) border-box;
+  border: 1px solid transparent;
+  box-shadow: var(--eid-shadow);
+  z-index: -2;
+}
+
+.hero::after {
+  content: "☾  ✦  ✧";
+  position: absolute;
+  top: 4rem;
+  right: 9vw;
+  color: #C9933A;
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  letter-spacing: 1rem;
+  opacity: .9;
+  z-index: -1;
+}
+
+.hero-bg-img {
+  width: min(46vw, 520px);
+  inset: auto auto 3.2rem 5vw;
+  height: min(56dvh, 500px);
+  background-size: contain;
+  background-position: center bottom;
+  opacity: .96;
+  filter: drop-shadow(0 22px 32px rgba(84,61,31,.12));
+}
+
+.hero-overlay,
+.hero-gold-line {
+  display: none !important;
+}
+
+.hero-body {
+  max-width: 980px;
+  padding: 7rem 3rem 4rem;
+  text-align: center;
+  margin-inline: auto;
+}
+
+.hero-sheep {
+  font-size: clamp(5rem, 11vw, 8rem);
+  margin-bottom: .65rem;
+  filter: drop-shadow(0 18px 22px rgba(84,61,31,.13));
+}
+
+.hero-tag {
+  background: #fff;
+  color: #C9933A;
+  border: 1px solid var(--eid-line);
+  box-shadow: 0 8px 24px rgba(201,147,58,0.12);
+  letter-spacing: .18em;
+}
+
+.hero-h1 {
+  color: #2A1520;
+  font-family: 'Amiri', serif;
+  font-size: clamp(3.2rem, 8vw, 6.6rem);
+  text-shadow: none;
+  letter-spacing: -.03em;
+}
+
+.hero-h1 em {
+  color: #5C1228;
+  display: inline;
+}
+
+.hero-p {
+  color: #8A7070;
+  max-width: 560px;
+  margin: 1rem auto 2rem;
+  font-size: clamp(1rem, 1.7vw, 1.25rem);
+  line-height: 1.9;
+}
+
+.pills-row {
+  gap: .8rem;
+  margin-top: 1.5rem;
+}
+
+.pill,
+.change-teams-btn,
+.back-btn,
+.score-pill {
+  background: rgba(255,255,255,.76);
+  border: 1px solid rgba(217,168,78,.18);
+  color: #2A1520;
+  box-shadow: 0 8px 24px rgba(201,147,58,0.12);
+  border-radius: 999px;
+  backdrop-filter: blur(10px);
+}
+
+.pill {
+  padding: .8rem 1.35rem;
+  font-size: .95rem;
+}
+
+.pill-a {
+  color: #7B1D35;
+  text-shadow: none;
+}
+
+.pill-b {
+  color: #5C1228;
+  text-shadow: none;
+}
+
+/* ================= MENU ================= */
+
+.menu-section {
+  max-width: 1120px;
+  padding: 3.5rem 1.5rem 1.5rem;
+}
+
+.menu-eyebrow {
+  color: #C9933A;
+  letter-spacing: .28em;
+}
+
+.menu-h2,
+.score-title,
+.panel-title,
+.sg-setup-label,
+.mafia-step-label,
+.hex-win-text,
+.win-text,
+.vid-question-text {
+  color: #2A1520;
+}
+
+.menu-h2 {
+  font-size: clamp(1.8rem, 4vw, 2.7rem);
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.menu-h2::before,
+.menu-h2::after {
+  content: "✦";
+  color: #C9933A;
+  margin-inline: 1rem;
+  font-size: 1rem;
+}
+
+.menu-grid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.menu-btn {
+  min-height: 285px;
+  padding: 1rem .9rem 1.15rem;
+  justify-content: space-between;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,250,241,.92));
+  border: 1px solid rgba(217,168,78,.18);
+  border-radius: 24px;
+  box-shadow: 0 8px 24px rgba(201,147,58,0.12);
+}
+
+.menu-btn::before {
+  content: "";
+  position: absolute;
+  inset: 3.7rem .9rem auto;
+  height: 7.2rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(201,147,58,.22), rgba(201,147,58,.15));
+  z-index: 0;
+}
+
+.menu-btn::after {
+  height: auto;
+  inset: auto 50% 1.05rem auto;
+  width: 38px;
+  aspect-ratio: 1;
+  opacity: 1;
+  border-radius: 50%;
+  background: #C9933A;
+  box-shadow: inset 0 -5px 10px rgba(67,96,82,.14);
+  transform: translateX(50%);
+}
+
+.menu-btn:hover,
+.menu-btn.active {
+  transform: translateY(-10px);
+  border-color: rgba(217,168,78,.68);
+  box-shadow: 0 22px 44px rgba(84,61,31,.14);
+}
+
+.menu-btn.highlight {
+  background: linear-gradient(180deg, #fffdf9, #fff4e4);
+  border-color: rgba(217,168,78,.76);
+  transform: translateY(-4px);
+}
+
+.mb-num {
+  position: relative;
+  z-index: 1;
+  width: 36px;
+  height: 36px;
+  display: inline-grid;
+  place-items: center;
+  align-self: flex-start;
+  border-radius: 50%;
+  background: var(--eid-mint);
+  color: #5C1228;
+  letter-spacing: 0;
+}
+
+.menu-btn.highlight .mb-num {
+  background: #C9933A;
+  color: #fff;
+}
+
+.mb-icon {
+  position: relative;
+  z-index: 1;
+  font-size: 4.2rem;
+  margin-top: .65rem;
+  filter: drop-shadow(0 10px 16px rgba(84,61,31,.12));
+}
+
+.mb-name,
+.menu-btn.highlight .mb-name {
+  position: relative;
+  z-index: 1;
+  color: #2A1520;
+  font-size: 1.02rem;
+}
+
+.mb-tag,
+.menu-btn.highlight .mb-tag {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  color: #8A7070;
+  margin-bottom: 2.25rem;
+}
+
+/* ================= PANELS ================= */
+
+.game-panel {
+  max-width: 1120px;
+  padding: 0 1.5rem;
+}
+
+.panel-inner,
+.mem-win,
+.hex-win,
+.sg-win,
+.sg-lose,
+.mafia-done,
+.vid-done {
+  background: rgba(255,255,255,.82);
+  border: 1px solid rgba(217,168,78,.18);
+  box-shadow: 0 8px 24px rgba(201,147,58,0.12);
+  border-radius: 28px;
+  backdrop-filter: blur(14px);
+}
+
+.panel-inner {
+  padding: 2.3rem;
+}
+
+.panel-head {
+  border-bottom: 1px solid rgba(217,168,78,.18);
+}
+
+.panel-icon-wrap {
+  background: linear-gradient(135deg, var(--eid-mint), #fff2df);
+  box-shadow: inset 0 -10px 18px rgba(84,61,31,.05);
+}
+
+.panel-sub,
+.step-txt,
+.sg-setup-hint,
+.sg-guess-label,
+.mafia-role-desc,
+.vid-prog-lbl,
+.win-sub {
+  color: #8A7070;
+}
+
+.step-n,
+.hex-qletter {
+  background: #C9933A;
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(217,168,78,.22);
+}
+
+.panel-tip,
+.hex-qbox,
+.vid-question-box {
+  background: #fff8ec;
+  border: 1px solid rgba(217,168,78,.20);
+  border-right: 4px solid #C9933A;
+}
+
+/* ================= GAME ELEMENTS ================= */
+
+.toggle-group,
+.mstat,
+.sg-log-row,
+.sg-slot,
+.sg-key,
+.hex-cell,
+.card-front {
+  background: #FFFFFF;
+  border-color: rgba(217,168,78,.18);
+  box-shadow: 0 8px 24px rgba(201,147,58,0.12);
+}
+
+.toggle-btn {
+  color: #8A7070;
+}
+
+.toggle-btn.active,
+.act-btn.primary,
+.sg-key-confirm {
+  background: #5C1228;
+  color: #fff;
+}
+
+.card-back,
+.mafia-card.back {
+  background:
+    radial-gradient(circle at 50% 34%, rgba(255,255,255,.36), transparent 4rem),
+    linear-gradient(135deg, #C9933A, var(--eid-gold-soft));
+  border-color: rgba(217,168,78,.34);
+}
+
+.card-back .q-mark,
+.mafia-card-back-txt {
+  color: #fff;
+}
+
+.mem-card.matched .card-front,
+.sg-slot.sg-correct {
+  background: #e9f5ef;
+  border-color: #C9933A;
+  color: #5C1228;
+}
+
+.mem-card.wrong .card-front,
+.sg-slot.sg-wrong,
+.sg-key-del {
+  background: #F9EEF1;
+  border-color: #C9933A;
+  color: #7B1D35;
+}
+
+/* ================= BUTTONS ================= */
+
+.act-btn {
+  border-radius: 999px;
+  padding: .8rem 1.45rem;
+  box-shadow: 0 8px 24px rgba(201,147,58,0.12);
+}
+
+.act-btn.gold,
+.mafia-start-btn,
+.vid-next-btn {
+  background: linear-gradient(180deg, #edc777, #d9a84e);
+  color: #fff;
+}
+
+.act-btn.red {
+  background: #C9933A;
+  color: #fff;
+}
+
+.act-btn.blue {
+  background: #C9933A;
+  color: #fff;
+}
+
+.act-btn.ghost,
+.ghost-btn {
+  background: rgba(255,255,255,.70);
+  border: 1px solid rgba(217,168,78,.22);
+  color: #8A7070;
+}
+
+/* ================= HEX / TEAM COLORS ================= */
+
+.red-dir,
+.turn-badge.red,
+.red-pill,
+.red-item {
+  background: #F9EEF1;
+  color: #7B1D35;
+  border-color: rgba(201,147,58,.35);
+}
+
+.blue-dir,
+.turn-badge.blue,
+.blue-pill,
+.blue-item {
+  background: #FBF5E9;
+  color: #5C1228;
+  border-color: rgba(201,147,58,.45);
+}
+
+.hex-cell.owned-red {
+  background: #C9933A;
+}
+
+.hex-cell.owned-blue {
+  background: #5C1228;
+}
+
+.top-edge,
+.bot-edge {
+  color: #5C1228;
+}
+
+.right-edge,
+.left-edge {
+  color: #7B1D35;
+}
+
+/* ================= SCOREBOARD ================= */
+
+.score-section {
+  margin-top: 3rem;
+  padding: 4rem 1.5rem;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(201,147,58,.18), transparent 22rem),
+    linear-gradient(180deg, #fff6e9, #fffaf0);
+}
+
+.score-section::before {
+  background:
+    linear-gradient(180deg, transparent 0, transparent 65%, rgba(201,147,58,.22) 65%, rgba(201,147,58,.22) 100%);
+  clip-path: ellipse(80% 22% at 50% 100%);
+}
+
+.score-teams {
+  gap: 1.35rem;
+}
+
+.score-team {
+  min-height: 250px;
+  border-radius: 30px;
+  background: rgba(255,255,255,.78);
+  border: 1px solid rgba(217,168,78,.18);
+  box-shadow: 0 8px 24px rgba(201,147,58,0.12);
+}
+
+.score-team.leading {
+  border-color: rgba(217,168,78,.58);
+  background: #FFFFFF;
+  box-shadow: var(--eid-shadow);
+}
+
+.st-label {
+  color: #8A7070;
+}
+
+.st-num {
+  font-size: clamp(3.6rem, 7vw, 5.4rem);
+}
+
+.red-num {
+  color: #7B1D35;
+}
+
+.blue-num {
+  color: #5C1228;
+}
+
+.vs-badge {
+  color: #C9933A;
+  font-size: 2.8rem;
+}
+
+.ctrl-btn {
+  background: rgba(255,255,255,.85);
+  border-color: rgba(217,168,78,.22);
+  color: #2A1520;
+}
+
+.crown-tag {
+  background: #fff3d9;
+  color: #C9933A;
+}
+
+/* ================= FOOTER / BACK BAR ================= */
+
+.site-footer {
+  background: #fff8e9;
+  color: #8A7070;
+  border-top: 1px solid rgba(217,168,78,.16);
+}
+
+.back-bar {
+  background: rgba(255,253,247,.82);
+  border-bottom: 1px solid rgba(217,168,78,.15);
+  backdrop-filter: blur(14px);
+}
+
+/* ================= TEAM MODAL DESIGN ================= */
+
+.team-modal {
+  background:
+    radial-gradient(circle at 10% 10%, rgba(201,147,58,.22), transparent 22rem),
+    radial-gradient(circle at 88% 24%, rgba(201,147,58,.28), transparent 22rem),
+    rgba(255,250,240,.78) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+
+.team-modal-box {
+  background: rgba(255,253,247,.94) !important;
+  border: 1px solid rgba(217,168,78,.20) !important;
+  border-radius: 32px !important;
+  box-shadow: var(--eid-shadow) !important;
+}
+
+.tm-header {
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.86), rgba(255,246,232,.82)) !important;
+  border-bottom: 1px solid rgba(217,168,78,.16) !important;
+}
+
+.tm-header .tm-title,
+.tm-title,
+.split-col-name {
+  color: #2A1520 !important;
+}
+
+.tm-header .tm-sub,
+.tm-sub,
+.tm-section-label,
+.tm-player-num,
+.split-count {
+  color: #8A7070 !important;
+}
+
+.tm-header-icon {
+  filter: drop-shadow(0 8px 12px rgba(217,168,78,.20)) !important;
+}
+
+.tm-close-btn,
+.tm-remove-btn {
+  background: #F9EEF1 !important;
+  color: #7B1D35 !important;
+}
+
+.tm-input,
+.tm-team-name-input {
+  background: #FFFFFF !important;
+  border: 1.5px solid rgba(217,168,78,.20) !important;
+  color: #2A1520 !important;
+  border-radius: 999px !important;
+}
+
+.tm-input:focus,
+.tm-team-name-input:focus {
+  border-color: #C9933A !important;
+  box-shadow: 0 0 0 4px rgba(201,147,58,.18) !important;
+}
+
+.tm-add-btn,
+.ghost-split {
+  background: #fff8ec !important;
+  border-color: rgba(217,168,78,.28) !important;
+  color: #C9933A !important;
+  border-radius: 18px !important;
+}
+
+.tm-split-btn,
+.tm-save-btn {
+  background: linear-gradient(180deg, #C9933A, #7B1D35) !important;
+  color: #fff !important;
+  box-shadow: 0 14px 24px rgba(201,147,58,.24) !important;
+  border-radius: 20px !important;
+}
+
+.split-inner {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(217,168,78,.18) !important;
+  border-radius: 24px !important;
+}
+
+.split-divider,
+.split-col-header {
+  border-color: rgba(217,168,78,.14) !important;
+  background: rgba(217,168,78,.14) !important;
+}
+
+.red-dot {
+  background: #C9933A !important;
+  box-shadow: 0 0 0 4px rgba(201,147,58,.14) !important;
+}
+
+.blue-dot {
+  background: #5C1228 !important;
+  box-shadow: 0 0 0 4px rgba(201,147,58,.18) !important;
+}
+
+/* مهم عشان المودال المخفي ما يمنع الضغط */
+.team-modal:not(.tm-visible) {
+  pointer-events: none !important;
+}
+
+.team-modal.tm-visible {
+  pointer-events: auto !important;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 920px) {
+  .hero-bg-img {
+    opacity: .22;
+    width: 86vw;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .hero-body {
+    padding: 6rem 1.25rem 3rem;
+  }
+
+  .menu-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .menu-btn {
+    min-height: 235px;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero {
+    min-height: 82dvh;
+  }
+
+  .hero::before {
+    inset: 1rem 1rem auto;
+    height: 78%;
+    border-radius: 42px;
+  }
+
+  .hero::after {
+    right: 1.5rem;
+    letter-spacing: .35rem;
+  }
+
+  .menu-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .menu-btn {
+    min-height: 205px;
+  }
+
+  .mb-icon {
+    font-size: 3.1rem;
+  }
+
+  .score-teams {
+    grid-template-columns: 1fr;
+  }
+
+  .vs-badge {
+    display: block;
+  }
+}
+
+@media (max-width: 400px) {
+  .menu-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* =========================================================
+   NEW HERO / HEADER
+   هيدر أصغر + حيوي + فيه زينة + صورة خروف
+   حطيه آخر Style.css
+   ========================================================= */
+
+.hero {
+  position: relative;
+  min-height: 72vh;
+  height: auto;
+  padding: 2.5rem 1.2rem 3.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 12% 20%, rgba(244, 154, 145, 0.16), transparent 18rem),
+    radial-gradient(circle at 88% 14%, rgba(159, 191, 173, 0.22), transparent 18rem),
+    radial-gradient(circle at 15% 85%, rgba(217, 168, 78, 0.10), transparent 16rem),
+    linear-gradient(180deg, #FFFFFF 0%, #fff8ef 100%);
+}
+
+/* البطاقة الرئيسية داخل الهيدر */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 2rem 4% auto;
+  height: min(62vh, 470px);
+  border-radius: 90px 90px 140px 140px / 70px 70px 120px 120px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,251,244,.95));
+  border: 1px solid rgba(217, 168, 78, 0.16);
+  box-shadow:
+    0 30px 60px rgba(84, 61, 31, 0.10),
+    inset 0 1px 0 rgba(255,255,255,0.8);
+  z-index: -2;
+}
+
+/* زينة أعلى يمين */
+.hero::after {
+  content: "✦  ✦  ☾";
+  position: absolute;
+  top: 4rem;
+  right: 10%;
+  color: #d9a84e;
+  font-size: clamp(1.7rem, 3vw, 2.8rem);
+  letter-spacing: .9rem;
+  opacity: .95;
+  z-index: -1;
+}
+
+/* إخفاء أي شكل قديم */
+.hero-overlay,
+.hero-gold-line {
+  display: none !important;
+}
+
+/* صورة الخروف */
+.hero-bg-img {
+  position: absolute;
+  left: 6%;
+  bottom: 2rem;
+  width: min(28vw, 310px);
+  height: min(50vh, 380px);
+  background-image: url("./images/eid-sheep.png"); /* غيّري المسار هنا */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  z-index: 1;
+  opacity: 1;
+  filter: drop-shadow(0 22px 30px rgba(84,61,31,.16));
+}
+
+/* قاعدة بسيطة تحت الخروف */
+.hero-bg-img::before {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 115%;
+  height: 54px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #fffaf3 0%, #f7efe1 100%);
+  box-shadow: 0 10px 22px rgba(84, 61, 31, 0.08);
+  z-index: -1;
+}
+
+/* هدايا يم الخروف */
+.hero-bg-img::after {
+  content: "🎁";
+  position: absolute;
+  bottom: 20px;
+  left: -12px;
+  font-size: 2rem;
+  filter: drop-shadow(0 8px 12px rgba(84,61,31,.12));
+}
+
+/* المحتوى */
+.hero-body {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 950px;
+  padding: 5rem 2rem 2.4rem;
+  text-align: center;
+  margin-inline: auto;
+}
+
+/* فوانيس جانبية */
+.hero-body::before,
+.hero-body::after {
+  position: absolute;
+  top: 1.2rem;
+  font-size: 2.5rem;
+  filter: drop-shadow(0 8px 12px rgba(217,168,78,.16));
+}
+
+.hero-body::before {
+  content: "🏮";
+  right: 9%;
+}
+
+.hero-body::after {
+  content: "✨";
+  left: 11%;
+  top: 2rem;
+  color: #d9a84e;
+  font-size: 2rem;
+}
+
+/* الوسم الصغير */
+.hero-tag {
+  display: inline-block;
+  padding: .55rem 1.2rem;
+  margin-bottom: 1rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,.95);
+  border: 1px solid rgba(217,168,78,.20);
+  color: #d9a84e;
+  font-size: .82rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  box-shadow: 0 8px 18px rgba(84,61,31,.06);
+}
+
+/* عنوان الهيدر */
+.hero-h1 {
+  font-family: 'Amiri', serif;
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  line-height: 1.15;
+  color: #28574d;
+  margin-bottom: .8rem;
+  text-shadow: none;
+  letter-spacing: -.02em;
+}
+
+.hero-h1 em {
+  color: #d9a84e;
+  font-style: normal;
+  display: inline;
+}
+
+/* الوصف */
+.hero-p {
+  max-width: 560px;
+  margin: 0 auto 1.6rem;
+  color: #73867b;
+  font-size: 1.05rem;
+  line-height: 1.9;
+}
+
+/* لو عندج الايموجي القديم */
+.hero-sheep {
+  display: none !important;
+}
+
+/* الأزرار */
+.pills-row {
+  display: flex;
+  justify-content: center;
+  gap: .75rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.pill,
+.change-teams-btn {
+  background: rgba(255,255,255,.96);
+  border: 1px solid rgba(217,168,78,.16);
+  border-radius: 999px;
+  color: #28574d;
+  padding: .85rem 1.35rem;
+  font-size: .95rem;
+  font-weight: 800;
+  box-shadow: 0 10px 24px rgba(84,61,31,.06);
+  transition: .25s ease;
+}
+
+.pill:hover,
+.change-teams-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 28px rgba(84,61,31,.10);
+}
+
+.pill-a {
+  color: #e4776f;
+}
+
+.pill-b {
+  color: #5f8f7d;
+}
+
+.change-teams-btn {
+  margin-top: .8rem;
+  background: linear-gradient(180deg, #fffaf4, #fff6ea);
+}
+
+/* أشكال إضافية في الهيدر */
+.hero .hero-decor-stars {
+  display: none;
+}
+
+/* زينة خفيفة بالخلفية */
+.hero-body .mini-spark {
+  display: none;
+}
+
+/* إذا عندج nav فوق الهيدر ويتأثر */
+.back-bar {
+  background: rgba(255,253,247,.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(217,168,78,.14);
+}
+
+/* =========================
+   Responsive
+   ========================= */
+@media (max-width: 980px) {
+  .hero {
+    min-height: 66vh;
+    padding: 2rem 1rem 2.5rem;
+  }
+
+  .hero::before {
+    inset: 1.5rem 3% auto;
+    height: 470px;
+    border-radius: 60px;
+  }
+
+  .hero-bg-img {
+    width: 240px;
+    height: 290px;
+    left: 2%;
+    opacity: .22;
+  }
+
+  .hero-body {
+    padding: 4.5rem 1.3rem 2rem;
+  }
+
+  .hero-h1 {
+    font-size: clamp(2.4rem, 7vw, 4rem);
+  }
+}
+
+@media (max-width: 700px) {
+  .hero {
+    min-height: auto;
+    padding-bottom: 2rem;
+  }
+
+  .hero::before {
+    height: 420px;
+    border-radius: 40px;
+  }
+
+  .hero::after {
+    top: 2rem;
+    right: 1.3rem;
+    letter-spacing: .35rem;
+    font-size: 1.6rem;
+  }
+
+  .hero-bg-img {
+    width: 190px;
+    height: 230px;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 1.2rem;
+    opacity: .15;
+  }
+
+  .hero-body {
+    padding: 3.8rem 1rem 1.6rem;
+  }
+
+  .hero-body::before,
+  .hero-body::after {
+    display: none;
+  }
+
+  .hero-h1 {
+    font-size: 2.4rem;
+  }
+
+  .hero-p {
+    font-size: .95rem;
+  }
+
+  .pill,
+  .change-teams-btn {
+    font-size: .88rem;
+    padding: .75rem 1.05rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero::before {
+    height: 390px;
+  }
+
+  .hero-h1 {
+    font-size: 2rem;
+  }
+
+  .hero-tag {
+    font-size: .74rem;
+  }
+}
+/* =========================================================
+   EID HERO — خروف + بالونات + زينة عيد
+   الصقيه آخر Style.css
+   ========================================================= */
+
+:root {
+  --hero-bg: #fffaf3;
+  --hero-bg-2: #fff6ea;
+  --hero-card: #fffdf9;
+  --hero-line: rgba(217, 168, 78, 0.18);
+  --hero-gold: #d9a84e;
+  --hero-gold-soft: #f3d89b;
+  --hero-green: #7B1D35;
+  --hero-green-soft: #8fb4a4;
+  --hero-pink: #f4b8b2;
+  --hero-pink-2: #f7d3cf;
+  --hero-text: #7B1D35;
+  --hero-muted: #7d8f86;
+  --hero-shadow: 0 26px 60px rgba(92, 70, 37, 0.10);
+  --hero-shadow-soft: 0 12px 28px rgba(92, 70, 37, 0.08);
+}
+
+/* =========================
+   HERO CONTAINER
+   ========================= */
+.hero {
+  position: relative;
+  min-height: 72vh;
+  height: auto;
+  padding: 2.3rem 1.2rem 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 8% 15%, rgba(244,184,178,.14), transparent 18rem),
+    radial-gradient(circle at 90% 10%, rgba(143,180,164,.16), transparent 18rem),
+    linear-gradient(180deg, var(--hero-bg) 0%, var(--hero-bg-2) 100%);
+}
+
+/* البطاقة الرئيسية */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 2rem 4% auto;
+  height: min(62vh, 470px);
+  border-radius: 80px 80px 120px 120px / 60px 60px 110px 110px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,251,245,.94));
+  border: 1px solid var(--hero-line);
+  box-shadow: var(--hero-shadow);
+  z-index: -2;
+}
+
+/* زخرفة نجوم وهلال أعلى اليمين */
+.hero::after {
+  content: "✦  ✦  ☾";
+  position: absolute;
+  top: 4.2rem;
+  right: 8%;
+  color: var(--hero-gold);
+  font-size: clamp(1.6rem, 3vw, 2.7rem);
+  letter-spacing: .85rem;
+  opacity: .95;
+  z-index: 1;
+}
+
+/* إخفاء القديم */
+.hero-overlay,
+.hero-gold-line {
+  display: none !important;
+}
+
+/* =========================
+   SHEEP IMAGE
+   ========================= */
+.hero-bg-img {
+  position: absolute;
+  left: 5.5%;
+  bottom: 1.8rem;
+  width: min(26vw, 300px);
+  height: min(48vh, 360px);
+  background-image: url("./images/eid-sheep.png"); /* غيري المسار إذا لازم */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  z-index: 2;
+  opacity: 1;
+  filter: drop-shadow(0 22px 28px rgba(92,70,37,.14));
+}
+
+/* قاعدة تحت الخروف */
+.hero-bg-img::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -8px;
+  transform: translateX(-50%);
+  width: 120%;
+  height: 52px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #fffaf3 0%, #f8efe3 100%);
+  box-shadow: 0 10px 20px rgba(92,70,37,.10);
+  z-index: -1;
+}
+
+/* بالونات يم الخروف */
+.hero-bg-img::after {
+  content: "";
+  position: absolute;
+  left: -68px;
+  top: 10px;
+  width: 140px;
+  height: 210px;
+  background:
+    radial-gradient(circle at 38px 52px, #bfe0d2 0 28px, transparent 29px),
+    radial-gradient(circle at 84px 28px, #f7c7c0 0 30px, transparent 31px),
+    radial-gradient(circle at 98px 86px, #fff8f1 0 24px, transparent 25px),
+    linear-gradient(#c7a96b, #c7a96b),
+    linear-gradient(#c7a96b, #c7a96b),
+    linear-gradient(#c7a96b, #c7a96b);
+  background-size:
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    2px 72px,
+    2px 76px,
+    2px 64px;
+  background-position:
+    0 0,
+    0 0,
+    0 0,
+    38px 80px,
+    84px 58px,
+    98px 110px;
+  background-repeat: no-repeat;
+  filter: drop-shadow(0 10px 16px rgba(92,70,37,.08));
+}
+
+/* =========================
+   HERO BODY
+   ========================= */
+.hero-body {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: 940px;
+  padding: 4.8rem 2rem 2.2rem;
+  text-align: center;
+  margin-inline: auto;
+}
+
+/* فوانيس معلقة */
+.hero-body::before {
+  content: "🏮    🏮";
+  position: absolute;
+  top: 1.2rem;
+  right: 8%;
+  font-size: 3rem;
+  letter-spacing: 2rem;
+  filter: drop-shadow(0 8px 12px rgba(217,168,78,.14));
+}
+
+/* رايات عيد أعلى اليسار */
+.hero-body::after {
+  content: "";
+  position: absolute;
+  top: .8rem;
+  left: 7%;
+  width: 250px;
+  height: 80px;
+  background:
+    linear-gradient(135deg, transparent 0 17%, #f4d7ba 17% 50%, transparent 50%) 0 0 / 50px 70px no-repeat,
+    linear-gradient(135deg, transparent 0 17%, #b9d5c7 17% 50%, transparent 50%) 42px 8px / 50px 70px no-repeat,
+    linear-gradient(135deg, transparent 0 17%, #f6c7c0 17% 50%, transparent 50%) 84px 0 / 50px 70px no-repeat,
+    linear-gradient(135deg, transparent 0 17%, #f3e4c1 17% 50%, transparent 50%) 126px 8px / 50px 70px no-repeat,
+    linear-gradient(135deg, transparent 0 17%, #b9d5c7 17% 50%, transparent 50%) 168px 0 / 50px 70px no-repeat,
+    linear-gradient(180deg, #d8b06b, #d8b06b) 0 0 / 100% 2px no-repeat;
+  opacity: .9;
+}
+
+/* أيقونة الخروف القديمة إذا موجودة */
+.hero-sheep {
+  display: none !important;
+}
+
+.hero-tag {
+  display: inline-block;
+  padding: .58rem 1.25rem;
+  margin-bottom: 1rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,.96);
+  border: 1px solid rgba(217,168,78,.18);
+  color: var(--hero-gold);
+  font-size: .82rem;
+  font-weight: 800;
+  letter-spacing: .05em;
+  box-shadow: var(--hero-shadow-soft);
+}
+
+.hero-h1 {
+  font-family: 'Amiri', serif;
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  line-height: 1.15;
+  color: var(--hero-text);
+  margin-bottom: .8rem;
+  text-shadow: none;
+  letter-spacing: -.02em;
+}
+
+.hero-h1 em {
+  color: var(--hero-gold);
+  font-style: normal;
+  display: inline;
+}
+
+.hero-p {
+  max-width: 560px;
+  margin: 0 auto 1.6rem;
+  color: var(--hero-muted);
+  font-size: 1.04rem;
+  line-height: 1.9;
+}
+
+/* =========================
+   BUTTONS / TEAM PILLS
+   ========================= */
+.pills-row {
+  display: flex;
+  justify-content: center;
+  gap: .8rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.pill,
+.change-teams-btn {
+  background: rgba(255,255,255,.96);
+  border: 1px solid rgba(217,168,78,.16);
+  border-radius: 999px;
+  color: var(--hero-text);
+  padding: .85rem 1.35rem;
+  font-size: .95rem;
+  font-weight: 800;
+  box-shadow: var(--hero-shadow-soft);
+  transition: .25s ease;
+}
+
+.pill:hover,
+.change-teams-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 28px rgba(92,70,37,.12);
+}
+
+.pill-a {
+  color: #e47b74;
+}
+
+.pill-b {
+  color: #6b9a88;
+}
+
+.change-teams-btn {
+  margin-top: .9rem;
+  background: linear-gradient(180deg, #fffbf6, #fff4e9);
+}
+
+/* =========================
+   DECORATION CLOUDS / SHAPES
+   ========================= */
+.hero .hero-clouds-right {
+  display: none;
+}
+
+/* نضيف غيوم/زينة يمين تحت باستخدام pseudo من hero */
+.hero .decor-right {
+  display: none;
+}
+
+.hero-body .mini-decor {
+  display: none;
+}
+
+/* كتلة زينة أسفل اليمين */
+.hero > .hero-right-decor {
+  display: none;
+}
+
+/* =========================
+   Responsive
+   ========================= */
+@media (max-width: 980px) {
+  .hero {
+    min-height: 66vh;
+    padding: 2rem 1rem 2.4rem;
+  }
+
+  .hero::before {
+    inset: 1.6rem 3% auto;
+    height: 450px;
+    border-radius: 54px;
+  }
+
+  .hero::after {
+    top: 2.8rem;
+    right: 1.5rem;
+    letter-spacing: .35rem;
+  }
+
+  .hero-bg-img {
+    width: 230px;
+    height: 280px;
+    left: 2%;
+    opacity: .22;
+  }
+
+  .hero-body {
+    padding: 4.3rem 1.4rem 2rem;
+  }
+
+  .hero-body::before {
+    right: 4%;
+    font-size: 2.4rem;
+    letter-spacing: 1rem;
+  }
+
+  .hero-body::after {
+    left: 2%;
+    width: 190px;
+    opacity: .65;
+  }
+
+  .hero-h1 {
+    font-size: clamp(2.3rem, 7vw, 4rem);
+  }
+}
+
+@media (max-width: 700px) {
+  .hero {
+    min-height: auto;
+    padding-bottom: 2rem;
+  }
+
+  .hero::before {
+    height: 400px;
+    border-radius: 36px;
+  }
+
+  .hero-bg-img {
+    width: 185px;
+    height: 220px;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 1rem;
+    opacity: .14;
+  }
+
+  .hero-bg-img::after {
+    transform: scale(.75);
+    transform-origin: left top;
+    left: -35px;
+  }
+
+  .hero-body {
+    padding: 3.5rem 1rem 1.6rem;
+  }
+
+  .hero-body::before,
+  .hero-body::after {
+    display: none;
+  }
+
+  .hero-h1 {
+    font-size: 2.2rem;
+  }
+
+  .hero-p {
+    font-size: .95rem;
+  }
+
+  .pill,
+  .change-teams-btn {
+    font-size: .88rem;
+    padding: .75rem 1.05rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero::before {
+    height: 370px;
+  }
+
+  .hero-h1 {
+    font-size: 1.95rem;
+  }
+
+  .hero-tag {
+    font-size: .74rem;
+    padding: .5rem 1rem;
+  }
+}
+/* =========================================================
+   HERO UPDATE
+   شيل الفوانيس + حط صورة 6.jpg
+   ========================================================= */
+
+/* نخفي الفوانيس القديمة */
+.hero-body::before {
+  content: none !important;
+  display: none !important;
+}
+
+/* إذا عندك أي فوانيس من كلاس ثاني */
+.lantern,
+.lanterns,
+.hero-lantern,
+.hero-lanterns {
+  display: none !important;
+}
+
+/* نخلي صورة الخروف تظهر */
+.hero-bg-img {
+  position: absolute;
+  left: 6%;
+  bottom: 1.2rem;
+  width: 260px;
+  height: 320px;
+  background-image: url("./images/6.jpg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  z-index: 3;
+  opacity: 1;
+  filter: drop-shadow(0 14px 24px rgba(92,70,37,.12));
+}
+
+/* قاعدة ناعمة تحت الصورة */
+.hero-bg-img::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -10px;
+  transform: translateX(-50%);
+  width: 118%;
+  height: 42px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #fffaf3 0%, #f7ecdd 100%);
+  box-shadow: 0 8px 18px rgba(92,70,37,.08);
+  z-index: -1;
+}
+
+/* نخلي بالونات بجانب الصورة */
+.hero-bg-img::after {
+  content: "";
+  position: absolute;
+  left: -55px;
+  top: 18px;
+  width: 120px;
+  height: 180px;
+  background:
+    radial-gradient(circle at 30px 55px, #bfe0d2 0 24px, transparent 25px),
+    radial-gradient(circle at 78px 30px, #f7c7c0 0 26px, transparent 27px),
+    radial-gradient(circle at 86px 82px, #fff8f1 0 20px, transparent 21px),
+    linear-gradient(#c7a96b, #c7a96b),
+    linear-gradient(#c7a96b, #c7a96b),
+    linear-gradient(#c7a96b, #c7a96b);
+  background-size:
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    2px 62px,
+    2px 64px,
+    2px 58px;
+  background-position:
+    0 0,
+    0 0,
+    0 0,
+    30px 78px,
+    78px 56px,
+    86px 102px;
+  background-repeat: no-repeat;
+  filter: drop-shadow(0 8px 14px rgba(92,70,37,.08));
+}
+
+/* نخلي محتوى الهيدر فوق كل شي */
+.hero-body {
+  position: relative;
+  z-index: 4;
+}
+
+/* الرايات تبقى */
+.hero-body::after {
+  content: "";
+  position: absolute;
+  top: .8rem;
+  left: 8%;
+  width: 250px;
+  height: 80px;
+  background:
+    linear-gradient(135deg, transparent 0 17%, #f4d7ba 17% 50%, transparent 50%) 0 0 / 50px 70px no-repeat,
+    linear-gradient(135deg, transparent 0 17%, #b9d5c7 17% 50%, transparent 50%) 42px 8px / 50px 70px no-repeat,
+    linear-gradient(135deg, transparent 0 17%, #f6c7c0 17% 50%, transparent 50%) 84px 0 / 50px 70px no-repeat,
+    linear-gradient(135deg, transparent 0 17%, #f3e4c1 17% 50%, transparent 50%) 126px 8px / 50px 70px no-repeat,
+    linear-gradient(135deg, transparent 0 17%, #b9d5c7 17% 50%, transparent 50%) 168px 0 / 50px 70px no-repeat,
+    linear-gradient(180deg, #d8b06b, #d8b06b) 0 0 / 100% 2px no-repeat;
+  opacity: .95;
+  z-index: 2;
+}
+
+/* نجوم وهلال أعلى اليمين */
+.hero::after {
+  content: "✦  ✦  ☾";
+  position: absolute;
+  top: 3.7rem;
+  right: 7%;
+  color: #d9a84e;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  letter-spacing: .65rem;
+  opacity: .95;
+  z-index: 2;
+}
+
+/* لو في خروف ايموجي قديم نخفيه */
+.hero-sheep {
+  display: none !important;
+}
+
+/* للهاتف */
+@media (max-width: 900px) {
+  .hero-bg-img {
+    width: 220px;
+    height: 270px;
+    left: 2%;
+    opacity: .22;
+  }
+}
+
+@media (max-width: 700px) {
+  .hero-bg-img {
+    width: 170px;
+    height: 210px;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 1rem;
+    opacity: .16;
+  }
+
+  .hero-bg-img::after {
+    transform: scale(.75);
+    transform-origin: left top;
+    left: -30px;
+  }
+
+  .hero-body::after {
+    display: none;
+  }
+}
+/* =========================================================
+   HONEYCOMB REDESIGN — أقرب للصورة المرجعية
+   حطيه آخر Style.css
+   ========================================================= */
+
+#hexSection .panel-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  background: #fffdf9;
+  border: 1px solid rgba(123, 29, 53, 0.10);
+  box-shadow: 0 20px 50px rgba(123, 29, 53, 0.08);
+}
+
+#hexSection .hex-header {
+  text-align: center;
+  margin-bottom: 1.2rem;
+}
+
+#hexSection .panel-title {
+  color: #7B1D35;
+  font-size: 2rem;
+}
+
+#hexSection .hex-dir-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: .7rem 0;
+  flex-wrap: wrap;
+}
+
+#hexSection .red-dir,
+#hexSection .blue-dir {
+  font-weight: 800;
+  border-radius: 999px;
+  padding: .45rem 1rem;
+}
+
+#hexSection .red-dir {
+  background: #ffe8e7;
+  color: #de6d79;
+  border: 1px solid #f1a1a8;
+}
+
+#hexSection .blue-dir {
+  background: #fff4d8;
+  color: #8e6c28;
+  border: 1px solid #e7c96c;
+}
+
+#hexSection .turn-badge {
+  display: inline-block;
+  padding: .8rem 1.6rem;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: 1rem;
+  margin-top: .4rem;
+}
+
+#hexSection .turn-badge.red {
+  background: #F9EEF1;
+  color: #de6d79;
+  border: 1.5px solid #f1a1a8;
+}
+
+#hexSection .turn-badge.blue {
+  background: #fff6de;
+  color: #8e6c28;
+  border: 1.5px solid #e7c96c;
+}
+
+/* صندوق السؤال */
+#hexSection .hex-qbox {
+  background: #FFFFFF;
+  border: 1px solid rgba(122,77,179,.12);
+  border-right: 5px solid #7B1D35;
+  border-radius: 22px;
+  padding: 1.3rem 1.4rem;
+  box-shadow: 0 12px 28px rgba(86,58,122,.06);
+}
+
+#hexSection .hex-qletter {
+  background: #7B1D35;
+  color: #fff;
+  box-shadow: none;
+}
+
+#hexSection .hex-qtext {
+  color: #7B1D35;
+  font-weight: 800;
+}
+
+#hexSection .hex-qanswer {
+  background: #fff5dc;
+  color: #7d611f;
+  border-radius: 12px;
+  padding: .7rem 1rem;
+  display: none;
+}
+
+/* خلفية لوحة الخلية */
+#hexSection .hex-wrap {
+  position: relative;
+  max-width: 620px;
+  margin: 1.4rem auto 1rem;
+  padding: 2rem 2.5rem;
+  border-radius: 28px;
+  overflow: hidden;
+  background: #E8B860;
+}
+
+#hexSection .hex-wrap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, #D4899A 0 28%, transparent 28% 72%, #D4899A 72% 100%),
+    linear-gradient(225deg, #D4899A 0 28%, transparent 28% 72%, #D4899A 72% 100%);
+  opacity: .95;
+  pointer-events: none;
+}
+
+#hexSection .hex-wrap > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* كلمات فوق/تحت/يمين/يسار */
+#hexSection .hex-edge {
+  color: #7B1D35;
+  font-weight: 900;
+  font-size: .85rem;
+}
+
+/* صفوف الخلايا */
+#hexSection .hex-row {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: -8px;
+}
+
+/* الخلية */
+#hexSection .hex-cell {
+  width: 58px;
+  height: 64px;
+  position: relative;
+  clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  background: #ffffff;
+  border: none;
+  cursor: pointer;
+  transition: .18s ease;
+  box-shadow:
+    0 0 0 3px #7B1D35,
+    0 8px 14px rgba(86,58,122,.10);
+}
+
+#hexSection .hex-cell:hover:not(.owned-red):not(.owned-blue) {
+  transform: translateY(-2px) scale(1.04);
+  background: #fff9e8;
+}
+
+#hexSection .hex-cell.selected {
+  background: #fff3cd;
+  box-shadow:
+    0 0 0 3px #7B1D35,
+    0 0 0 6px rgba(122,77,179,.14);
+}
+
+#hexSection .hex-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#hexSection .hex-letter {
+  color: #6c47ab;
+  font-size: 1.65rem;
+  font-weight: 900;
+  font-family: 'Tajawal', sans-serif;
+  line-height: 1;
+}
+
+/* تلوين الفرق */
+#hexSection .hex-cell.owned-red {
+  background: #f4a1a6 !important;
+}
+
+#hexSection .hex-cell.owned-blue {
+  background: #f2d27e !important;
+}
+
+#hexSection .hex-cell.owned-red .hex-letter {
+  color: #fff !important;
+}
+
+#hexSection .hex-cell.owned-blue .hex-letter {
+  color: #6a4a17 !important;
+}
+
+/* رسالة الفوز */
+#hexSection .hex-win {
+  background: #FFFFFF;
+  border: 1px solid rgba(122,77,179,.12);
+  border-radius: 22px;
+  box-shadow: 0 12px 26px rgba(86,58,122,.06);
+}
+
+#hexSection .hex-win-text {
+  color: #7B1D35;
+  font-size: 1.45rem;
+  font-weight: 900;
+}
+
+/* الأزرار */
+#hexSection .panel-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 1.2rem;
+}
+
+#hexSection .act-btn.primary {
+  background: #7B1D35;
+  color: #fff;
+}
+
+#hexSection .act-btn.primary:hover {
+  background: #5C1228;
+}
+
+#hexSection .act-btn.red {
+  background: #f4a1a6;
+  color: #fff;
+}
+
+#hexSection .act-btn.red:hover {
+  background: #ec8f96;
+}
+
+#hexSection .act-btn.blue {
+  background: #f2d27e;
+  color: #6a4a17;
+}
+
+#hexSection .act-btn.blue:hover {
+  background: #ecc965;
+}
+
+#hexSection .act-btn.gold {
+  background: #7B1D35;
+  color: #fff;
+}
+
+#hexSection .act-btn.ghost {
+  background: #fff;
+  border: 1px solid rgba(122,77,179,.16);
+  color: #6d5a7e;
+}
+
+/* موبايل */
+@media (max-width: 700px) {
+  #hexSection .hex-wrap {
+    padding: 1.5rem 1rem;
+  }
+
+  #hexSection .hex-cell {
+    width: 46px;
+    height: 52px;
+  }
+
+  #hexSection .hex-letter {
+    font-size: 1.25rem;
+  }
+}
+/* =========================================
+   تعديل خلية الحروف
+   ========================================= */
+
+/* نخفي الكلمات اللي داخل اللوحة نفسها لأن عندج الاتجاهات فوق جاهزة */
+#hexSection .hex-edge {
+  display: none !important;
+}
+
+/* نكبر المسافة بين السداسيات */
+#hexSection .hex-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px !important;      /* كان أقل */
+  margin-bottom: 10px !important; /* بدل التلاصق */
+}
+
+/* شكل السداسية */
+#hexSection .hex-cell {
+  width: 58px;
+  height: 64px;
+  position: relative;
+  clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  background: #ffffff;
+  border: none;
+  cursor: pointer;
+  transition: .18s ease;
+  box-shadow:
+    0 0 0 3px #7B1D35,
+    0 8px 14px rgba(86,58,122,.10);
+}
+
+/* لو تبين اللوحة نفسها تتنفس أكثر */
+#hexSection .hex-wrap {
+  padding: 2.2rem 2.8rem !important;
+}
+/* =========================================================
+   MEMORY PAGE — SAME COLORS AS HONEYCOMB
+   نفس ألوان خلية الحروف: وردي + ذهبي + بنفسجي
+   ========================================================= */
+
+#memSection .panel-inner {
+  max-width: 980px !important;
+  margin: 0 auto !important;
+  background: #fffdf9 !important;
+  border: 1px solid rgba(123, 29, 53, 0.10) !important;
+  box-shadow: 0 20px 50px rgba(123, 29, 53, 0.08) !important;
+  border-radius: 30px !important;
+}
+
+/* العنوان */
+#memSection .panel-title {
+  color: #7B1D35 !important;
+  font-size: 2rem !important;
+  font-weight: 900 !important;
+}
+
+/* أزرار سهلة / صعبة */
+#memSection .toggle-group {
+  background: #fffaf2 !important;
+  border: 1px solid rgba(123, 29, 53, .12) !important;
+  border-radius: 999px !important;
+  padding: 5px !important;
+  box-shadow: 0 10px 22px rgba(123, 29, 53, .06) !important;
+}
+
+#memSection .toggle-btn {
+  background: transparent !important;
+  color: #7B1D35 !important;
+  border-radius: 999px !important;
+  font-weight: 900 !important;
+}
+
+#memSection .toggle-btn.active {
+  background: #7B1D35 !important;
+  color: #fff !important;
+  box-shadow: 0 8px 18px rgba(123, 29, 53, .22) !important;
+}
+
+/* الإحصائيات */
+#memSection .mem-stats {
+  gap: 12px !important;
+}
+
+#memSection .mstat {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(123, 29, 53, .12) !important;
+  box-shadow: 0 10px 24px rgba(123, 29, 53, .06) !important;
+}
+
+#memSection .mstat span {
+  color: #7B1D35 !important;
+  font-weight: 900 !important;
+}
+
+#memSection .mstat small {
+  color: #8B5E1A !important;
+  font-weight: 800 !important;
+}
+
+/* لوحة الكروت نفس خلية الحروف */
+#memSection .mem-grid {
+  position: relative !important;
+  padding: 2rem !important;
+  margin: 2rem auto 1.5rem !important;
+  border-radius: 32px !important;
+  overflow: hidden !important;
+
+  background:
+    linear-gradient(135deg, #D4899A 0 28%, transparent 28% 72%, #D4899A 72% 100%),
+    linear-gradient(225deg, #D4899A 0 28%, transparent 28% 72%, #D4899A 72% 100%),
+    #E8B860 !important;
+
+  box-shadow: 0 18px 38px rgba(123, 29, 53, .08) !important;
+}
+
+/* نخلي الكروت فوق الخلفية */
+#memSection .mem-card {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* المسافات */
+#memSection .mem-grid.easy {
+  grid-template-columns: repeat(4, 115px) !important;
+  gap: 16px !important;
+}
+
+#memSection .mem-grid.hard {
+  grid-template-columns: repeat(4, 105px) !important;
+  gap: 14px !important;
+}
+
+/* الكرت */
+#memSection .mem-card {
+  border: none !important;
+  background: transparent !important;
+  cursor: pointer !important;
+  perspective: 900px !important;
+}
+
+/* ظهر الكرت */
+#memSection .mem-card-back {
+  background: #ffffff !important;
+  border: none !important;
+  color: #7B1D35 !important;
+  font-size: 2.2rem !important;
+  font-weight: 900 !important;
+
+  box-shadow:
+    0 0 0 3px #7B1D35,
+    0 10px 18px rgba(123, 29, 53, .14) !important;
+}
+
+/* وجه الكرت */
+#memSection .mem-card-front {
+  background: #FFFFFF !important;
+  border: none !important;
+  padding: 7px !important;
+
+  box-shadow:
+    0 0 0 3px #7B1D35,
+    0 10px 18px rgba(123, 29, 53, .14) !important;
+}
+
+#memSection .mem-card-front img {
+  border-radius: 18px !important;
+  object-fit: cover !important;
+}
+
+/* Hover */
+#memSection .mem-card:hover:not(.matched) .mem-card-back {
+  background: #fff6de !important;
+  transform: translateY(-2px) !important;
+}
+
+/* إذا غلط */
+#memSection .mem-card.wrong .mem-card-front {
+  box-shadow:
+    0 0 0 3px #D4899A,
+    0 0 0 7px rgba(212, 137, 154, .22) !important;
+}
+
+/* إذا صح */
+#memSection .mem-card.matched .mem-card-front {
+  box-shadow:
+    0 0 0 3px #E8B860,
+    0 0 0 7px rgba(232, 184, 96, .28) !important;
+}
+
+/* تثبيت حركة الفتح */
+#memSection .mem-card.flipped .mem-card-inner,
+#memSection .mem-card.matched .mem-card-inner {
+  transform: rotateY(180deg) !important;
+}
+
+#memSection .mem-card:not(.flipped):not(.matched) .mem-card-inner {
+  transform: rotateY(0deg) !important;
+}
+
+/* رسالة الفوز */
+#memSection .mem-win {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(123, 29, 53, .12) !important;
+  border-radius: 22px !important;
+  box-shadow: 0 12px 26px rgba(123, 29, 53, .06) !important;
+}
+
+#memSection .win-text {
+  color: #7B1D35 !important;
+  font-weight: 900 !important;
+}
+
+#memSection .win-sub {
+  color: #7B1D35 !important;
+  font-weight: 800 !important;
+}
+
+/* أزرار تحت */
+#memSection .panel-actions {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  flex-wrap: wrap !important;
+  margin-top: 1.4rem !important;
+}
+
+#memSection .act-btn.primary {
+  background: #7B1D35 !important;
+  color: #fff !important;
+  box-shadow: 0 12px 24px rgba(123, 29, 53, .24) !important;
+}
+
+#memSection .act-btn.primary:hover {
+  background: #5C1228 !important;
+}
+
+#memSection .act-btn.red {
+  background: #D4899A !important;
+  color: #fff !important;
+  box-shadow: 0 12px 24px rgba(212, 137, 154, .24) !important;
+}
+
+#memSection .act-btn.red:hover {
+  background: #C4697A !important;
+}
+
+#memSection .act-btn.blue {
+  background: #E8B860 !important;
+  color: #6a4a17 !important;
+  box-shadow: 0 12px 24px rgba(232, 184, 96, .28) !important;
+}
+
+#memSection .act-btn.blue:hover {
+  background: #D4A040 !important;
+}
+
+/* نقاط فوق */
+body .score-pill.red-pill {
+  background: #F9EEF1 !important;
+  color: #7B1D35 !important;
+  border: 1px solid rgba(123,29,53,0.25) !important;
+}
+
+body .score-pill.blue-pill {
+  background: #fff6de !important;
+  color: #8B5E1A !important;
+  border: 1px solid rgba(201,147,58,0.35) !important;
+}
+
+/* موبايل */
+@media (max-width: 700px) {
+  #memSection .mem-grid.easy,
+  #memSection .mem-grid.hard {
+    grid-template-columns: repeat(4, 74px) !important;
+    gap: 12px !important;
+    padding: 1.3rem !important;
+  }
+
+  #memSection .mem-card-back {
+    font-size: 1.6rem !important;
+  }
+
+  #memSection .mem-card-face {
+    border-radius: 18px !important;
+  }
+
+  #memSection .mem-card-front img {
+    border-radius: 12px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  #memSection .mem-grid.easy,
+  #memSection .mem-grid.hard {
+    grid-template-columns: repeat(4, 64px) !important;
+    gap: 10px !important;
+  }
+}
+/* =========================================================
+   SECRET NUMBER PAGE — SAME COLORS AS HONEYCOMB / MEMORY
+   خمن الرقم السري بنفس ستايل خلية الحروف
+   حطيه آخر Style.css
+   ========================================================= */
+
+#secretSection .panel-inner {
+  max-width: 980px !important;
+  margin: 0 auto !important;
+  background: #fffdf9 !important;
+  border: 1px solid rgba(123, 29, 53, 0.12) !important;
+  border-radius: 30px !important;
+  box-shadow: 0 20px 50px rgba(123, 29, 53, 0.08) !important;
+}
+
+/* العنوان */
+#secretSection .panel-title,
+#secretSection .sg-setup-label {
+  color: #7B1D35 !important;
+  font-weight: 900 !important;
+}
+
+#secretSection .panel-title {
+  font-size: 2rem !important;
+}
+
+#secretSection .sg-setup-label {
+  font-size: 1.45rem !important;
+}
+
+#secretSection .panel-sub,
+#secretSection .sg-setup-hint,
+#secretSection .sg-guess-label {
+  color: #7d8f86 !important;
+  font-weight: 700 !important;
+}
+
+/* الخط الفاصل */
+#secretSection hr,
+#secretSection .panel-inner > hr {
+  border: none !important;
+  height: 1px !important;
+  background: rgba(123, 29, 53, .12) !important;
+  margin: 1.8rem 0 !important;
+}
+
+/* منطقة اللعب */
+#secretSection .sg-setup,
+#secretSection .sg-play,
+#secretSection .sg-guess-area {
+  background: transparent !important;
+}
+
+/* خانات الرقم */
+#secretSection .sg-slots {
+  gap: 14px !important;
+  margin: 1rem 0 1.4rem !important;
+}
+
+#secretSection .sg-slot {
+  width: 64px !important;
+  height: 76px !important;
+  border-radius: 18px !important;
+
+  background: #FFFFFF !important;
+  border: 2px solid rgba(123, 29, 53, .18) !important;
+
+  color: #7B1D35 !important;
+  font-size: 2.1rem !important;
+  font-weight: 900 !important;
+
+  box-shadow: 0 10px 22px rgba(123, 29, 53, .06) !important;
+}
+
+#secretSection .sg-slot.sg-active {
+  border-color: #7B1D35 !important;
+  box-shadow:
+    0 0 0 4px rgba(123, 29, 53, .16),
+    0 12px 24px rgba(123, 29, 53, .08) !important;
+}
+
+#secretSection .sg-slot.sg-filled {
+  background: #fff6de !important;
+  border-color: #E8B860 !important;
+  color: #6a4a17 !important;
+}
+
+#secretSection .sg-slot.sg-correct {
+  background: #fff6de !important;
+  border-color: #E8B860 !important;
+  color: #6a4a17 !important;
+}
+
+#secretSection .sg-slot.sg-wrong {
+  background: #F9EEF1 !important;
+  border-color: #D4899A !important;
+  color: #7B1D35 !important;
+}
+
+/* لوحة الأرقام */
+#secretSection .sg-numpad {
+  max-width: 290px !important;
+  gap: 10px !important;
+  padding: 1rem !important;
+  border-radius: 28px !important;
+
+  background:
+    linear-gradient(135deg, #D4899A 0 28%, transparent 28% 72%, #D4899A 72% 100%),
+    linear-gradient(225deg, #D4899A 0 28%, transparent 28% 72%, #D4899A 72% 100%),
+    #E8B860 !important;
+
+  box-shadow: 0 18px 38px rgba(123, 29, 53, .08) !important;
+}
+
+/* أزرار الأرقام */
+#secretSection .sg-key {
+  height: 58px !important;
+  border-radius: 16px !important;
+
+  background: #ffffff !important;
+  border: none !important;
+
+  color: #7B1D35 !important;
+  font-size: 1.35rem !important;
+  font-weight: 900 !important;
+
+  box-shadow:
+    0 0 0 3px #7B1D35,
+    0 10px 18px rgba(123, 29, 53, .14) !important;
+
+  transition: .18s ease !important;
+}
+
+#secretSection .sg-key:hover {
+  background: #fff6de !important;
+  transform: translateY(-2px) scale(1.03) !important;
+}
+
+#secretSection .sg-key:active {
+  transform: scale(.96) !important;
+}
+
+/* زر الحذف */
+#secretSection .sg-key-del {
+  background: #F9EEF1 !important;
+  color: #7B1D35 !important;
+  box-shadow:
+    0 0 0 3px #D4899A,
+    0 10px 18px rgba(212, 137, 154, .16) !important;
+}
+
+#secretSection .sg-key-del:hover {
+  background: #ffdedd !important;
+}
+
+/* زر الصح */
+#secretSection .sg-key-confirm {
+  background: #7B1D35 !important;
+  color: #fff !important;
+  box-shadow:
+    0 0 0 3px #7B1D35,
+    0 12px 24px rgba(123, 29, 53, .24) !important;
+}
+
+#secretSection .sg-key-confirm:hover {
+  background: #5C1228 !important;
+}
+
+/* رسالة الخطأ */
+#secretSection .sg-err {
+  color: #7B1D35 !important;
+  font-weight: 900 !important;
+}
+
+/* سجل المحاولات */
+#secretSection .sg-log {
+  max-width: 520px !important;
+  margin: 1rem auto 0 !important;
+  padding: .5rem !important;
+  border-radius: 24px !important;
+  background: #fffaf2 !important;
+  border: 1px solid rgba(123, 29, 53, .10) !important;
+}
+
+#secretSection .sg-log-row {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(123, 29, 53, .12) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 8px 18px rgba(123, 29, 53, .05) !important;
+}
+
+#secretSection .sg-log-num {
+  color: #7B1D35 !important;
+  font-weight: 900 !important;
+}
+
+/* أرقام سجل المحاولات */
+#secretSection .sg-log-digit {
+  border-radius: 12px !important;
+  font-weight: 900 !important;
+}
+
+#secretSection .sg-d-green {
+  background: #fff6de !important;
+  color: #6a4a17 !important;
+  border: 1.5px solid #E8B860 !important;
+}
+
+#secretSection .sg-d-yellow {
+  background: #F9EEF1 !important;
+  color: #7B1D35 !important;
+  border: 1.5px solid rgba(123, 29, 53, .35) !important;
+}
+
+#secretSection .sg-d-red {
+  background: #F9EEF1 !important;
+  color: #7B1D35 !important;
+  border: 1.5px solid #D4899A !important;
+}
+
+#secretSection .hint-green {
+  color: #8B5E1A !important;
+}
+
+#secretSection .hint-yellow {
+  color: #7B1D35 !important;
+}
+
+/* الفوز والخسارة */
+#secretSection .sg-result {
+  max-width: 560px !important;
+  margin: 1rem auto 0 !important;
+}
+
+#secretSection .sg-win,
+#secretSection .sg-lose {
+  border-radius: 22px !important;
+  padding: 1rem 1.4rem !important;
+  font-weight: 900 !important;
+  box-shadow: 0 12px 26px rgba(123, 29, 53, .06) !important;
+}
+
+#secretSection .sg-win {
+  background: #fff6de !important;
+  color: #6a4a17 !important;
+  border: 1.5px solid #E8B860 !important;
+}
+
+#secretSection .sg-lose {
+  background: #F9EEF1 !important;
+  color: #7B1D35 !important;
+  border: 1.5px solid #D4899A !important;
+}
+
+/* أزرار الصفحة */
+#secretSection .panel-actions,
+#secretSection .sg-bottom-btns {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  flex-wrap: wrap !important;
+  margin-top: 1.4rem !important;
+}
+
+#secretSection .act-btn.primary {
+  background: #7B1D35 !important;
+  color: #fff !important;
+  box-shadow: 0 12px 24px rgba(123, 29, 53, .24) !important;
+}
+
+#secretSection .act-btn.primary:hover {
+  background: #5C1228 !important;
+}
+
+#secretSection .act-btn.red {
+  background: #D4899A !important;
+  color: #fff !important;
+  box-shadow: 0 12px 24px rgba(212, 137, 154, .24) !important;
+}
+
+#secretSection .act-btn.red:hover {
+  background: #C4697A !important;
+}
+
+#secretSection .act-btn.blue {
+  background: #E8B860 !important;
+  color: #6a4a17 !important;
+  box-shadow: 0 12px 24px rgba(232, 184, 96, .28) !important;
+}
+
+#secretSection .act-btn.blue:hover {
+  background: #D4A040 !important;
+}
+
+#secretSection .act-btn.ghost {
+  background: #FFFFFF !important;
+  color: #7B1D35 !important;
+  border: 1px solid rgba(123, 29, 53, .18) !important;
+}
+
+/* نقاط فوق بنفس ألوان اللعبة */
+body .score-pill.red-pill {
+  background: #F9EEF1 !important;
+  color: #7B1D35 !important;
+  border: 1px solid rgba(123,29,53,0.25) !important;
+}
+
+body .score-pill.blue-pill {
+  background: #fff6de !important;
+  color: #8B5E1A !important;
+  border: 1px solid rgba(201,147,58,0.35) !important;
+}
+
+/* موبايل */
+@media (max-width: 600px) {
+  #secretSection .sg-slot {
+    width: 54px !important;
+    height: 66px !important;
+    font-size: 1.7rem !important;
+  }
+
+  #secretSection .sg-numpad {
+    max-width: 260px !important;
+    padding: .8rem !important;
+  }
+
+  #secretSection .sg-key {
+    height: 52px !important;
+    font-size: 1.15rem !important;
+  }
+}
+/* =========================================================
+   MAFIA PAGE — SAME COLORS AS HONEYCOMB
+   نفس ألوان خلية الحروف
+   حطيه آخر Style.css
+   ========================================================= */
+
+#mafiaSection .panel-inner {
+  max-width: 980px !important;
+  margin: 0 auto !important;
+  background: #fffdf9 !important;
+  border: 1px solid rgba(123, 29, 53, 0.12) !important;
+  border-radius: 30px !important;
+  box-shadow: 0 20px 50px rgba(123, 29, 53, 0.08) !important;
+}
+
+/* رأس الصفحة */
+#mafiaSection .panel-head {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(123, 29, 53, .10) !important;
+  padding-bottom: 1.3rem !important;
+  margin-bottom: 1.5rem !important;
+}
+
+#mafiaSection .panel-icon-wrap {
+  background: #F9EEF1 !important;
+  color: #7B1D35 !important;
+  box-shadow: 0 10px 20px rgba(123, 29, 53, .14) !important;
+}
+
+#mafiaSection .panel-title {
+  color: #7B1D35 !important;
+  font-size: 2rem !important;
+  font-weight: 900 !important;
+}
+
+#mafiaSection .panel-sub {
+  color: #7d8f86 !important;
+  font-weight: 700 !important;
+}
+
+/* اختيار عدد اللاعبين */
+#mafiaSection .mafia-step-label {
+  color: #7B1D35 !important;
+  font-weight: 900 !important;
+  font-size: 1.25rem !important;
+}
+
+#mafiaSection .mafia-count-row {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 14px !important;
+  margin: 1.2rem 0 !important;
+}
+
+#mafiaSection .mafia-count-num {
+  min-width: 82px !important;
+  height: 58px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  background: #FFFFFF !important;
+  border: 2px solid rgba(123, 29, 53, .18) !important;
+  border-radius: 18px !important;
+
+  color: #7B1D35 !important;
+  font-size: 2rem !important;
+  font-weight: 900 !important;
+
+  box-shadow: 0 10px 22px rgba(123, 29, 53, .06) !important;
+}
+
+#mafiaSection .mafia-count-btn {
+  width: 52px !important;
+  height: 52px !important;
+  border-radius: 16px !important;
+
+  background: #7B1D35 !important;
+  color: #fff !important;
+  border: none !important;
+
+  font-size: 1.6rem !important;
+  font-weight: 900 !important;
+
+  box-shadow: 0 12px 24px rgba(123, 29, 53, .24) !important;
+  cursor: pointer !important;
+  transition: .18s ease !important;
+}
+
+#mafiaSection .mafia-count-btn:hover {
+  background: #5C1228 !important;
+  transform: translateY(-2px) !important;
+}
+
+/* كروت الأدوار الصغيرة */
+#mafiaSection .mafia-roles-preview {
+  margin: 1rem auto 1.6rem !important;
+}
+
+#mafiaSection .role-preview-row {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  flex-wrap: wrap !important;
+}
+
+#mafiaSection .role-chip {
+  border-radius: 999px !important;
+  padding: .75rem 1.1rem !important;
+  font-weight: 900 !important;
+  border: 1px solid rgba(123, 29, 53, .12) !important;
+  box-shadow: 0 10px 20px rgba(123, 29, 53, .06) !important;
+}
+
+/* نخلي ألوان الأدوار داخلة في الثيم */
+#mafiaSection .role-chip:nth-child(1) {
+  background: #F9EEF1 !important;
+  color: #7B1D35 !important;
+  border-color: #f1a1a8 !important;
+}
+
+#mafiaSection .role-chip:nth-child(2) {
+  background: #F9EEF1 !important;
+  color: #7B1D35 !important;
+  border-color: rgba(123, 29, 53, .28) !important;
+}
+
+#mafiaSection .role-chip:nth-child(3) {
+  background: #fff6de !important;
+  color: #8B5E1A !important;
+  border-color: #e7c96c !important;
+}
+
+/* خلفية منطقة البطاقات */
+#mafiaSection #mafiaCards,
+#mafiaSection #mafiaSetup {
+  position: relative !important;
+}
+
+/* بطاقة المافيا */
+#mafiaSection .mafia-card-wrap {
+  display: flex !important;
+  justify-content: center !important;
+  margin: 1.4rem auto !important;
+  padding: 2rem !important;
+  border-radius: 32px !important;
+
+  background:
+    linear-gradient(135deg, #D4899A 0 28%, transparent 28% 72%, #D4899A 72% 100%),
+    linear-gradient(225deg, #D4899A 0 28%, transparent 28% 72%, #D4899A 72% 100%),
+    #E8B860 !important;
+
+  box-shadow: 0 18px 38px rgba(123, 29, 53, .08) !important;
+}
+
+/* خلف البطاقة */
+#mafiaSection .mafia-card.back {
+  width: 260px !important;
+  min-height: 340px !important;
+  border-radius: 28px !important;
+
+  background: #ffffff !important;
+  color: #7B1D35 !important;
+  border: none !important;
+
+  box-shadow:
+    0 0 0 4px #7B1D35,
+    0 18px 32px rgba(123, 29, 53, .16) !important;
+
+  cursor: pointer !important;
+  transition: .2s ease !important;
+}
+
+#mafiaSection .mafia-card.back:hover {
+  background: #fff6de !important;
+  transform: translateY(-4px) scale(1.02) !important;
+}
+
+#mafiaSection .mafia-card-back-inner {
+  color: #7B1D35 !important;
+}
+
+#mafiaSection .mafia-card-icon-back {
+  font-size: 4rem !important;
+}
+
+#mafiaSection .mafia-card-back-txt {
+  color: #7B1D35 !important;
+  font-weight: 900 !important;
+}
+
+/* وجه البطاقة */
+#mafiaSection .mafia-card.front {
+  width: 260px !important;
+  min-height: 340px !important;
+  border-radius: 28px !important;
+
+  background: #FFFFFF !important;
+  border: none !important;
+
+  box-shadow:
+    0 0 0 4px #7B1D35,
+    0 18px 32px rgba(123, 29, 53, .16) !important;
+}
+
+#mafiaSection .mafia-card-front-inner {
+  padding: 1.7rem !important;
+  text-align: center !important;
+}
+
+/* أيقونة الدور */
+#mafiaSection .mafia-role-icon {
+  width: 94px !important;
+  height: 94px !important;
+  margin: 0 auto 1rem !important;
+  border-radius: 24px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  background: #F9EEF1 !important;
+  color: #7B1D35 !important;
+
+  font-size: 3rem !important;
+  box-shadow: 0 12px 24px rgba(123, 29, 53, .18) !important;
+}
+
+#mafiaSection .mafia-role-label {
+  color: #7B1D35 !important;
+  font-size: 1.8rem !important;
+  font-weight: 900 !important;
+  margin-bottom: .7rem !important;
+}
+
+#mafiaSection .mafia-role-desc {
+  color: #7d8f86 !important;
+  font-weight: 700 !important;
+  line-height: 1.8 !important;
+}
+
+/* انتهاء التوزيع */
+#mafiaSection .mafia-done {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(123, 29, 53, .12) !important;
+  border-radius: 24px !important;
+  padding: 1.4rem !important;
+  box-shadow: 0 12px 26px rgba(123, 29, 53, .06) !important;
+}
+
+#mafiaSection .mafia-done-text {
+  color: #7B1D35 !important;
+  font-size: 1.5rem !important;
+  font-weight: 900 !important;
+}
+
+#mafiaSection .mafia-done-sub {
+  color: #7B1D35 !important;
+  font-weight: 800 !important;
+}
+
+/* أزرار الصفحة */
+#mafiaSection .panel-actions,
+#mafiaSection .mafia-card-btns,
+#mafiaSection .mafia-score-actions {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  flex-wrap: wrap !important;
+  margin-top: 1.4rem !important;
+}
+
+#mafiaSection .act-btn.primary {
+  background: #7B1D35 !important;
+  color: #fff !important;
+  box-shadow: 0 12px 24px rgba(123, 29, 53, .24) !important;
+}
+
+#mafiaSection .act-btn.primary:hover {
+  background: #5C1228 !important;
+}
+
+#mafiaSection .act-btn.red {
+  background: #D4899A !important;
+  color: #fff !important;
+  box-shadow: 0 12px 24px rgba(212, 137, 154, .24) !important;
+}
+
+#mafiaSection .act-btn.red:hover {
+  background: #C4697A !important;
+}
+
+#mafiaSection .act-btn.blue {
+  background: #E8B860 !important;
+  color: #6a4a17 !important;
+  box-shadow: 0 12px 24px rgba(232, 184, 96, .28) !important;
+}
+
+#mafiaSection .act-btn.blue:hover {
+  background: #D4A040 !important;
+}
+
+/* نقاط فوق بنفس ألوان خلية الحروف */
+body .score-pill.red-pill {
+  background: #F9EEF1 !important;
+  color: #7B1D35 !important;
+  border: 1px solid rgba(123,29,53,0.25) !important;
+}
+
+body .score-pill.blue-pill {
+  background: #fff6de !important;
+  color: #8B5E1A !important;
+  border: 1px solid rgba(201,147,58,0.35) !important;
+}
+
+/* موبايل */
+@media (max-width: 650px) {
+  #mafiaSection .mafia-card-wrap {
+    padding: 1.2rem !important;
+  }
+
+  #mafiaSection .mafia-card.back,
+  #mafiaSection .mafia-card.front {
+    width: 220px !important;
+    min-height: 300px !important;
+  }
+
+  #mafiaSection .mafia-role-icon {
+    width: 78px !important;
+    height: 78px !important;
+    font-size: 2.4rem !important;
+  }
+
+  #mafiaSection .mafia-role-label {
+    font-size: 1.45rem !important;
+  }
+}
+/* =========================================================
+   SCOREBOARD ON INDEX — SAME COLORS AS HONEYCOMB
+   لوحة النقاط مثل ألوان خلية الحروف
+   حطيه آخر Style.css
+   ========================================================= */
+
+/* خلفية القسم */
+.scoreboard-section,
+.score-section,
+.leaderboard-section,
+#scoreSection {
+  position: relative;
+  background:
+    linear-gradient(180deg, #fffaf3 0%, #fff7ef 45%, #fdf6ee 100%) !important;
+}
+
+/* عنوان لوحة النقاط */
+.scoreboard-section h2,
+.score-section h2,
+.leaderboard-section h2,
+#scoreSection h2,
+.scoreboard-title,
+.score-title {
+  color: #7B1D35 !important;
+  font-weight: 900 !important;
+}
+
+.scoreboard-section h2 .icon,
+.score-title .icon {
+  color: #7B1D35 !important;
+}
+
+/* زر إعادة التعيين */
+.reset-scores-btn,
+.score-reset-btn,
+.reset-btn.small-reset,
+.scoreboard-reset {
+  background: #FFFFFF !important;
+  color: #7B1D35 !important;
+  border: 1px solid rgba(123, 29, 53, .16) !important;
+  border-radius: 999px !important;
+  box-shadow: 0 8px 18px rgba(123, 29, 53, .06) !important;
+}
+
+.reset-scores-btn:hover,
+.score-reset-btn:hover,
+.reset-btn.small-reset:hover,
+.scoreboard-reset:hover {
+  background: #F9EEF1 !important;
+  color: #5C1228 !important;
+}
+
+/* الحاوية العامة للكروت */
+.scoreboard-wrap,
+.scoreboards-wrap,
+.score-cards-wrap,
+.teams-score-wrap,
+#scoreBoardWrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+/* كرت الفريق */
+.score-card,
+.team-score-card,
+.scoreboard-card,
+.team-points-card,
+#teamScore1,
+#teamScore2 {
+  width: 300px;
+  min-height: 255px;
+  background: #FFFFFF !important;
+  border: 1px solid rgba(123, 29, 53, .10) !important;
+  border-radius: 30px !important;
+  box-shadow: 0 18px 36px rgba(123, 29, 53, .08) !important;
+  padding: 1.6rem 1.4rem !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* لمسة خفيفة فوق الكرت */
+.score-card::before,
+.team-score-card::before,
+.scoreboard-card::before,
+.team-points-card::before,
+#teamScore1::before,
+#teamScore2::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 8px;
+  border-radius: 30px 30px 0 0;
+  background: linear-gradient(90deg, #D4899A, #E8B860, #7B1D35);
+  opacity: .9;
+}
+
+/* اسم الفريق */
+.score-card .team-name,
+.team-score-card .team-name,
+.scoreboard-card .team-name,
+.team-points-card .team-name,
+.score-team-name {
+  color: #7B1D35 !important;
+  font-weight: 900 !important;
+  font-size: 1.15rem !important;
+}
+
+/* رقم النقاط */
+.score-card .score-number,
+.team-score-card .score-number,
+.scoreboard-card .score-number,
+.team-points-card .score-number,
+.score-value,
+.team-score-value {
+  font-size: 5rem !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+}
+
+/* الفريق اليسار/الأول */
+.score-card:first-child .score-number,
+.team-score-card:first-child .score-number,
+.scoreboard-card:first-child .score-number,
+.team-points-card:first-child .score-number,
+#teamScore1 .score-number,
+#teamScore1 .score-value,
+#teamScore1 .team-score-value {
+  color: #8B5E1A !important; /* ذهبي */
+}
+
+/* الفريق اليمين/الثاني */
+.score-card:last-child .score-number,
+.team-score-card:last-child .score-number,
+.scoreboard-card:last-child .score-number,
+.team-points-card:last-child .score-number,
+#teamScore2 .score-number,
+#teamScore2 .score-value,
+#teamScore2 .team-score-value {
+  color: #7B1D35 !important; /* وردي */
+}
+
+/* VS */
+.vs-text,
+.vs-divider,
+.score-vs,
+.scoreboard-vs {
+  color: #d4a13f !important;
+  font-size: 3rem !important;
+  font-weight: 900 !important;
+  text-shadow: 0 4px 12px rgba(212, 161, 63, .14);
+}
+
+/* أزرار + و - */
+.score-actions,
+.team-score-actions,
+.score-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 1rem;
+}
+
+.score-btn,
+.score-adjust-btn,
+.team-score-btn,
+.score-plus,
+.score-minus {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 50% !important;
+  border: none !important;
+  font-size: 1.35rem !important;
+  font-weight: 900 !important;
+  cursor: pointer !important;
+  transition: .18s ease !important;
+  box-shadow: 0 8px 16px rgba(123, 29, 53, .08) !important;
+}
+
+/* زر + */
+.score-btn.plus,
+.score-adjust-btn.plus,
+.team-score-btn.plus,
+.score-plus {
+  background: #F9EEF1 !important;
+  color: #7B1D35 !important;
+}
+
+.score-btn.plus:hover,
+.score-adjust-btn.plus:hover,
+.team-score-btn.plus:hover,
+.score-plus:hover {
+  background: #7B1D35 !important;
+  color: #fff !important;
+  transform: translateY(-2px);
+}
+
+/* زر - */
+.score-btn.minus,
+.score-adjust-btn.minus,
+.team-score-btn.minus,
+.score-minus {
+  background: #fff6de !important;
+  color: #8B5E1A !important;
+}
+
+.score-btn.minus:hover,
+.score-adjust-btn.minus:hover,
+.team-score-btn.minus:hover,
+.score-minus:hover {
+  background: #E8B860 !important;
+  color: #6a4a17 !important;
+  transform: translateY(-2px);
+}
+
+/* شارة القائد */
+.captain-badge,
+.team-captain-badge,
+.leader-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #F9EEF1 !important;
+  color: #7B1D35 !important;
+  border-radius: 999px !important;
+  padding: .4rem .9rem !important;
+  font-size: .82rem !important;
+  font-weight: 900 !important;
+  margin-top: .8rem;
+}
+
+/* الأرضية السفلية الخفيفة */
+.scoreboard-section::after,
+.score-section::after,
+.leaderboard-section::after,
+#scoreSection::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 95px;
+  background: linear-gradient(180deg, rgba(185, 213, 199, 0.10), rgba(185, 213, 199, 0.22));
+  border-radius: 50% 50% 0 0 / 32% 32% 0 0;
+  pointer-events: none;
+}
+
+/* موبايل */
+@media (max-width: 768px) {
+  .score-card,
+  .team-score-card,
+  .scoreboard-card,
+  .team-points-card,
+  #teamScore1,
+  #teamScore2 {
+    width: min(92vw, 320px);
+    min-height: 230px;
+  }
+
+  .vs-text,
+  .vs-divider,
+  .score-vs,
+  .scoreboard-vs {
+    font-size: 2.3rem !important;
+  }
+
+  .score-card .score-number,
+  .team-score-card .score-number,
+  .scoreboard-card .score-number,
+  .team-points-card .score-number,
+  .score-value,
+  .team-score-value {
+    font-size: 4.2rem !important;
+  }
+}
+/* =========================================================
+   VIDEO / REACTION PAGE — SAME COLORS AS HONEYCOMB
+   صفحة من يعرف الرياكشن بنفس ألوان خلية الحروف
+   حطيه آخر Style.css
+   ========================================================= */
+
+#videoSection .panel-inner {
+  max-width: 980px !important;
+  margin: 0 auto !important;
+  background: #fffdf9 !important;
+  border: 1px solid rgba(123, 29, 53, 0.12) !important;
+  border-radius: 30px !important;
+  box-shadow: 0 20px 50px rgba(123, 29, 53, 0.08) !important;
+}
+
+/* رأس الصفحة */
+#videoSection .panel-head {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(123, 29, 53, .10) !important;
+  padding-bottom: 1.3rem !important;
+  margin-bottom: 1.5rem !important;
+}
+
+#videoSection .panel-icon-wrap {
+  background: #F9EEF1 !important;
+  color: #7B1D35 !important;
+  box-shadow: 0 10px 20px rgba(123, 29, 53, .14) !important;
+}
+
+#videoSection .panel-title {
+  color: #7B1D35 !important;
+  font-size: 2rem !important;
+  font-weight: 900 !important;
+}
+
+#videoSection .panel-sub {
+  color: #7d8f86 !important;
+  font-weight: 700 !important;
+}
+
+/* شريط التقدم */
+#videoSection .vid-progress-row {
+  max-width: 620px !important;
+  margin: 0 auto 1.4rem !important;
+  background: #FFFFFF !important;
+  border: 1px solid rgba(123, 29, 53, .12) !important;
+  border-radius: 22px !important;
+  padding: 1rem 1.2rem !important;
+  box-shadow: 0 12px 26px rgba(123, 29, 53, .06) !important;
+}
+
+#videoSection .vid-prog-lbl {
+  color: #7B1D35 !important;
+  font-weight: 900 !important;
+}
+
+#videoSection .vid-prog-bar {
+  height: 12px !important;
+  background: #F9EEF1 !important;
+  border-radius: 999px !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(212, 137, 154, .25) !important;
+}
+
+#videoSection .vid-prog-fill {
+  height: 100% !important;
+  background: linear-gradient(90deg, #7B1D35, #D4899A, #E8B860) !important;
+  border-radius: 999px !important;
+}
+
+/* صندوق السؤال */
+#videoSection .vid-question-box {
+  max-width: 720px !important;
+  margin: 1.3rem auto !important;
+  background: #FFFFFF !important;
+  border: 1px solid rgba(123, 29, 53, .12) !important;
+  border-right: 6px solid #7B1D35 !important;
+  border-radius: 24px !important;
+  padding: 1.2rem 1.4rem !important;
+  box-shadow: 0 12px 28px rgba(123, 29, 53, .06) !important;
+}
+
+#videoSection .vid-question-text {
+  color: #7B1D35 !important;
+  font-weight: 900 !important;
+  font-size: 1.1rem !important;
+}
+
+/* خلفية الفيديو مثل خلية الحروف */
+#videoSection .vid-player-wrap {
+  max-width: 760px !important;
+  margin: 1.6rem auto !important;
+  padding: 1.5rem !important;
+  border-radius: 32px !important;
+
+  background:
+    linear-gradient(135deg, #D4899A 0 28%, transparent 28% 72%, #D4899A 72% 100%),
+    linear-gradient(225deg, #D4899A 0 28%, transparent 28% 72%, #D4899A 72% 100%),
+    #E8B860 !important;
+
+  box-shadow: 0 18px 38px rgba(123, 29, 53, .08) !important;
+}
+
+/* الفيديو نفسه */
+#videoSection .vid-player {
+  width: 100% !important;
+  display: block !important;
+  border-radius: 24px !important;
+  background: #fff !important;
+
+  box-shadow:
+    0 0 0 4px #7B1D35,
+    0 18px 32px rgba(123, 29, 53, .16) !important;
+}
+
+/* أزرار النقاط والتنقل */
+#videoSection .vid-actions,
+#videoSection .vid-team-score-row,
+#videoSection .vid-nav-row {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  flex-wrap: wrap !important;
+}
+
+#videoSection .vid-team-score-row {
+  margin-top: 1.4rem !important;
+}
+
+#videoSection .vid-nav-row {
+  margin-top: 1rem !important;
+}
+
+/* الأزرار */
+#videoSection .act-btn.primary {
+  background: #7B1D35 !important;
+  color: #fff !important;
+  box-shadow: 0 12px 24px rgba(123, 29, 53, .24) !important;
+}
+
+#videoSection .act-btn.primary:hover {
+  background: #5C1228 !important;
+  transform: translateY(-2px) !important;
+}
+
+#videoSection .act-btn.red {
+  background: #D4899A !important;
+  color: #fff !important;
+  box-shadow: 0 12px 24px rgba(212, 137, 154, .24) !important;
+}
+
+#videoSection .act-btn.red:hover {
+  background: #C4697A !important;
+  transform: translateY(-2px) !important;
+}
+
+#videoSection .act-btn.blue {
+  background: #E8B860 !important;
+  color: #6a4a17 !important;
+  box-shadow: 0 12px 24px rgba(232, 184, 96, .28) !important;
+}
+
+#videoSection .act-btn.blue:hover {
+  background: #D4A040 !important;
+  transform: translateY(-2px) !important;
+}
+
+#videoSection .act-btn.ghost {
+  background: #FFFFFF !important;
+  color: #7B1D35 !important;
+  border: 1px solid rgba(123, 29, 53, .18) !important;
+  box-shadow: 0 10px 20px rgba(123, 29, 53, .06) !important;
+}
+
+#videoSection .act-btn.ghost:hover {
+  background: #F9EEF1 !important;
+  color: #5C1228 !important;
+}
+
+/* حالة disabled */
+#videoSection .vid-prev-btn:disabled,
+#videoSection .vid-team-btn:disabled,
+#videoSection .act-btn:disabled {
+  opacity: .45 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* شاشة النهاية */
+#videoSection .vid-done {
+  max-width: 620px !important;
+  margin: 1.8rem auto 0 !important;
+  background: #FFFFFF !important;
+  border: 1px solid rgba(123, 29, 53, .12) !important;
+  border-radius: 26px !important;
+  padding: 1.6rem !important;
+  text-align: center !important;
+  box-shadow: 0 12px 26px rgba(123, 29, 53, .06) !important;
+}
+
+#videoSection .vid-done-emoji {
+  font-size: 3rem !important;
+  margin-bottom: .5rem !important;
+}
+
+#videoSection .vid-done-text {
+  color: #7B1D35 !important;
+  font-size: 1.5rem !important;
+  font-weight: 900 !important;
+}
+
+/* نقاط فوق */
+body .score-pill.red-pill {
+  background: #F9EEF1 !important;
+  color: #7B1D35 !important;
+  border: 1px solid rgba(123,29,53,0.25) !important;
+}
+
+body .score-pill.blue-pill {
+  background: #fff6de !important;
+  color: #8B5E1A !important;
+  border: 1px solid rgba(201,147,58,0.35) !important;
+}
+
+/* موبايل */
+@media (max-width: 650px) {
+  #videoSection .vid-player-wrap {
+    padding: 1rem !important;
+    border-radius: 24px !important;
+  }
+
+  #videoSection .vid-player {
+    border-radius: 18px !important;
+  }
+
+  #videoSection .panel-title {
+    font-size: 1.6rem !important;
+  }
+
+  #videoSection .vid-question-text {
+    font-size: 1rem !important;
+  }
+}
+/* =========================================================
+   MOBILE HERO FIX
+   ضبط الهيدر في التلفون + وضوح صورة الخروف
+   حطيه آخر Style.css
+   ========================================================= */
+
+/* آيباد / شاشات متوسطة */
+@media (min-width: 701px) and (max-width: 980px) {
+  .hero {
+    min-height: 620px !important;
+    height: auto !important;
+    padding: 2rem 1rem 2.5rem !important;
+  }
+
+  .hero::before {
+    inset: 1.2rem 2.5% 1.2rem !important;
+    height: auto !important;
+    bottom: 1.2rem !important;
+    border-radius: 52px !important;
+  }
+
+  .hero-bg-img {
+    width: 260px !important;
+    height: 320px !important;
+    left: 3% !important;
+    bottom: 1.4rem !important;
+    opacity: 1 !important;
+    transform: none !important;
+    background-size: contain !important;
+    background-position: center bottom !important;
+    z-index: 3 !important;
+  }
+
+  .hero-body {
+    padding: 4rem 2rem 2rem !important;
+    z-index: 4 !important;
+  }
+}
+
+/* تلفون */
+@media (max-width: 700px) {
+  .hero {
+    min-height: 660px !important;
+    height: auto !important;
+    padding: 1rem .75rem !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+  }
+
+  .hero::before {
+    inset: .75rem .65rem .75rem !important;
+    height: auto !important;
+    bottom: .75rem !important;
+    border-radius: 32px !important;
+  }
+
+  .hero::after {
+    top: 1.5rem !important;
+    right: 1.2rem !important;
+    font-size: 1.35rem !important;
+    letter-spacing: .25rem !important;
+    z-index: 2 !important;
+  }
+
+  .hero-body {
+    padding: 3.1rem .9rem 285px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    text-align: center !important;
+    z-index: 4 !important;
+  }
+
+  .hero-tag {
+    font-size: .72rem !important;
+    padding: .45rem .9rem !important;
+    margin-bottom: .75rem !important;
+  }
+
+  .hero-h1 {
+    font-size: 2.25rem !important;
+    line-height: 1.08 !important;
+    margin-bottom: .85rem !important;
+  }
+
+  .pills-row {
+    gap: .55rem !important;
+    margin-top: .8rem !important;
+  }
+
+  .pill,
+  .change-teams-btn {
+    font-size: .85rem !important;
+    padding: .68rem .95rem !important;
+  }
+
+  .change-teams-btn {
+    margin-top: .65rem !important;
+  }
+
+  .hero-bg-img {
+    width: min(72vw, 245px) !important;
+    height: 285px !important;
+    left: 50% !important;
+    bottom: 1.35rem !important;
+    transform: translateX(-50%) !important;
+    opacity: 1 !important;
+    z-index: 3 !important;
+    background-size: contain !important;
+    background-position: center bottom !important;
+    background-repeat: no-repeat !important;
+    filter: drop-shadow(0 14px 22px rgba(92,70,37,.16)) !important;
+  }
+
+  .hero-bg-img::before {
+    width: 112% !important;
+    height: 36px !important;
+    bottom: -6px !important;
+    opacity: .95 !important;
+  }
+
+  .hero-bg-img::after {
+    transform: scale(.72) !important;
+    transform-origin: left top !important;
+    left: -42px !important;
+    top: 8px !important;
+    opacity: 1 !important;
+  }
+
+  .hero-body::before,
+  .hero-body::after {
+    display: none !important;
+  }
+}
+
+/* تلفونات صغيرة */
+@media (max-width: 420px) {
+  .hero {
+    min-height: 625px !important;
+  }
+
+  .hero-body {
+    padding: 2.9rem .75rem 255px !important;
+  }
+
+  .hero-h1 {
+    font-size: 2rem !important;
+  }
+
+  .hero-bg-img {
+    width: min(76vw, 220px) !important;
+    height: 255px !important;
+    bottom: 1.15rem !important;
+  }
+
+  .hero-bg-img::after {
+    transform: scale(.62) !important;
+    left: -34px !important;
+  }
+
+  .pill,
+  .change-teams-btn {
+    font-size: .8rem !important;
+    padding: .62rem .85rem !important;
+  }
+}
+
+
+/* =========================================================
+   FINAL HOME PAGE UPDATE
+   صورة 2026 + برغندي وذهبي + إصلاح نافذة الفرق
+   ========================================================= */
+
+:root {
+  --final-burgundy: #7B1D35;
+  --final-burgundy-dark: #5C1228;
+  --final-gold: #C9933A;
+  --final-gold-light: #E8B860;
+  --final-cream: #FFF6EA;
+}
+
+/* صورة الخروف الجديدة */
+.hero-bg-img {
+  position: absolute !important;
+  left: 6% !important;
+  bottom: clamp(4rem, 8vh, 6.5rem) !important;
+  width: 260px !important;
+  height: 320px !important;
+  background-image: url("./images/2026.jpeg") !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-position: center bottom !important;
+  z-index: 3 !important;
+  opacity: 1 !important;
+  filter: drop-shadow(0 14px 24px rgba(92,70,37,.12)) !important;
+}
+
+/* قاعدة تحت الصورة */
+.hero-bg-img::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 50% !important;
+  bottom: -10px !important;
+  transform: translateX(-50%) !important;
+  width: 118% !important;
+  height: 42px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(180deg, #fffaf3 0%, #f7ecdd 100%) !important;
+  box-shadow: 0 8px 18px rgba(92,70,37,.08) !important;
+  z-index: -1 !important;
+}
+
+/* البالونات: برغندي وذهبي */
+.hero-bg-img::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 80px !important; /* كانت 35px */
+  left: -30px !important; /* كانت -45px */
+  width: 120px !important;
+  height: 180px !important;
+  background:
+    radial-gradient(circle at 30px 55px, #7B1D35 0 24px, transparent 25px),
+    radial-gradient(circle at 78px 30px, #C9933A 0 26px, transparent 27px),
+    radial-gradient(circle at 86px 82px, #5C1228 0 20px, transparent 21px),
+    linear-gradient(#C9933A, #C9933A),
+    linear-gradient(#C9933A, #C9933A),
+    linear-gradient(#C9933A, #C9933A) !important;
+  background-size:
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    2px 62px,
+    2px 64px,
+    2px 58px !important;
+  background-position:
+    0 0,
+    0 0,
+    0 0,
+    30px 78px,
+    78px 56px,
+    86px 102px !important;
+  background-repeat: no-repeat !important;
+  filter: drop-shadow(0 8px 14px rgba(92,70,37,.08)) !important;
+}
+
+/* الرايات: برغندي وذهبي */
+.hero-body::after {
+  content: "" !important;
+  position: absolute !important;
+  top: .8rem !important;
+  left: 8% !important;
+  width: 250px !important;
+  height: 80px !important;
+  background:
+    linear-gradient(135deg, transparent 0 17%, #7B1D35 17% 50%, transparent 50%) 0 0 / 50px 70px no-repeat,
+    linear-gradient(135deg, transparent 0 17%, #C9933A 17% 50%, transparent 50%) 42px 8px / 50px 70px no-repeat,
+    linear-gradient(135deg, transparent 0 17%, #5C1228 17% 50%, transparent 50%) 84px 0 / 50px 70px no-repeat,
+    linear-gradient(135deg, transparent 0 17%, #E8B860 17% 50%, transparent 50%) 126px 8px / 50px 70px no-repeat,
+    linear-gradient(135deg, transparent 0 17%, #7B1D35 17% 50%, transparent 50%) 168px 0 / 50px 70px no-repeat,
+    linear-gradient(180deg, #C9933A, #C9933A) 0 0 / 100% 2px no-repeat !important;
+  opacity: .95 !important;
+  z-index: 2 !important;
+}
+
+/* النجوم والهلال */
+.hero::after {
+  content: "✦  ✦  ☾" !important;
+  position: absolute !important;
+  top: 3.7rem !important;
+  right: 7% !important;
+  color: #C9933A !important;
+  font-size: clamp(1.5rem, 3vw, 2.5rem) !important;
+  letter-spacing: .65rem !important;
+  opacity: .95 !important;
+  z-index: 2 !important;
+}
+
+/* نخفي الفوانيس القديمة */
+.hero-body::before {
+  content: none !important;
+  display: none !important;
+}
+
+/* ألوان أسماء الفرق */
+.pill-a {
+  color: #7B1D35 !important;
+}
+
+.pill-b {
+  color: #C9933A !important;
+}
+
+/* زر تغيير الفرق */
+.change-teams-btn {
+  background: linear-gradient(180deg, #fffaf4, #fff6ea) !important;
+  color: #7B1D35 !important;
+  border: 1px solid rgba(201,147,58,.35) !important;
+}
+
+/* إصلاح مهم: المودال المخفي ما يغطي الصفحة */
+.team-modal:not(.tm-visible) {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.team-modal.tm-visible {
+  display: flex !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* خلفية المودال */
+.team-modal {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999 !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 1rem !important;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(123,29,53,.20), transparent 24rem),
+    radial-gradient(circle at 88% 18%, rgba(201,147,58,.25), transparent 24rem),
+    rgba(255,250,240,.82) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+
+/* صندوق المودال */
+.team-modal-box {
+  width: min(94vw, 500px) !important;
+  max-height: 90dvh !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,250,241,.98)) !important;
+  border: 1px solid rgba(201,147,58,.30) !important;
+  border-radius: 32px !important;
+  box-shadow: 0 18px 48px rgba(84,61,31,.16) !important;
+  padding: 0 !important;
+}
+
+@media (max-width: 900px) {
+  .hero-bg-img {
+    width: 220px !important;
+    height: 270px !important;
+    left: 2% !important;
+    opacity: .25 !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .hero-bg-img {
+    width: 170px !important;
+    height: 210px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    bottom: 1rem !important;
+    opacity: .18 !important;
+  }
+
+  .hero-bg-img::after {
+    transform: scale(.75) !important;
+    transform-origin: left top !important;
+    left: -30px !important;
+  }
+
+  .hero-body::after {
+    display: none !important;
+  }
+}
+/* ===== ألوان الصفحة والأزرار: برغندي + ذهبي + أبيض ===== */
+
+:root {
+  --sn-burg: #7B1D35;
+  --sn-burg-dark: #5C1228;
+  --sn-gold: #C9933A;
+  --sn-gold-light: #E8B860;
+  --sn-white: #FFFFFF;
+  --sn-soft: #FBF5E9;
+}
+
+.sg-key {
+  background: #FFFFFF !important;
+  color: #7B1D35 !important;
+  border: 2px solid #7B1D35 !important;
+}
+
+.sg-key-confirm {
+  background: #7B1D35 !important;
+  color: #FFFFFF !important;
+}
+
+.sg-key-del {
+  background: #FFFFFF !important;
+  color: #7B1D35 !important;
+  border-color: #C9933A !important;
+}
+
+.sg-numpad {
+  background: #E8B860 !important;
+}
+
+.sg-slot {
+  background: #FFFFFF !important;
+  color: #7B1D35 !important;
+  border: 2px solid rgba(123,29,53,0.25) !important;
+}
+
+.sg-slot.sg-active {
+  border-color: #7B1D35 !important;
+}
+
+.sg-slot.sg-filled {
+  background: #FBF5E9 !important;
+  border-color: #C9933A !important;
+}
+
+/* الرقم في مكانه الصح */
+.sg-d-green {
+  background: #7B1D35 !important;
+  color: #FFFFFF !important;
+  border-color: #7B1D35 !important;
+}
+
+/* الرقم موجود بس مكانه غلط */
+.sg-d-yellow {
+  background: #E8B860 !important;
+  color: #5C1228 !important;
+  border-color: #C9933A !important;
+}
+
+/* الرقم غلط */
+.sg-d-red {
+  background: #FFFFFF !important;
+  color: #8A7070 !important;
+  border-color: rgba(123,29,53,0.2) !important;
+}
+
+/* تثبيت أزرار تحت */
+.sg-bottom-btns {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex-wrap: wrap !important;
+  margin-top: 1.6rem !important;
+  padding-bottom: 1rem !important;
+  width: 100% !important;
+}
+
+.sg-bottom-btns .act-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 150px !important;
+  border-radius: 999px !important;
+  padding: 14px 22px !important;
+  font-family: 'Tajawal', sans-serif !important;
+  font-size: 0.95rem !important;
+  font-weight: 900 !important;
+  cursor: pointer !important;
+  border: 1.5px solid rgba(201,147,58,0.35) !important;
+}
+
+.sg-bottom-btns .act-btn.primary {
+  background: #7B1D35 !important;
+  color: #FFFFFF !important;
+}
+
+.sg-bottom-btns .act-btn.ghost {
+  background: #FFFFFF !important;
+  color: #7B1D35 !important;
+}
+
+.sg-bottom-btns .act-btn.red {
+  background: #E8B860 !important;
+  color: #7B1D35 !important;
+}
+
+.sg-bottom-btns .act-btn.blue {
+  background: #7B1D35 !important;
+  color: #FFFFFF !important;
+}
+/* =========================================================
+   FINAL RESPONSIVE CLEANUP
+   Laptop + iPad + Phone
+   حطي هذا ضمن الملف النهائي فقط — بدون تكرار أكواد قديمة
+   ========================================================= */
+
+/* ---------- Header image / hero responsive ---------- */
+.hero {
+  min-height: clamp(560px, 72vh, 760px);
+  padding: clamp(1.2rem, 2.5vw, 2.5rem) clamp(0.8rem, 2vw, 1.5rem) clamp(2rem, 4vw, 3.5rem);
+}
+
+.hero::before {
+  inset: clamp(1rem, 2vw, 2rem) clamp(1rem, 4vw, 4rem) auto;
+  height: clamp(430px, 58vh, 520px);
+}
+
+.hero-bg-img {
+  width: clamp(260px, 22vw, 330px) !important;
+  height: clamp(330px, 30vw, 430px) !important;
+  left: clamp(0.6rem, 2.2vw, 2.8rem) !important;
+  bottom: clamp(4rem, 8vh, 6.5rem) !important;
+  opacity: 1 !important;
+  transform: none !important;
+  background-image: url("./images/3.jpg") !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-position: center bottom !important;
+}
+
+/* إزالة القاعدة تحت الصورة */
+.hero-bg-img::before {
+  display: none !important;
+  content: none !important;
+}
+
+/* البالونات: برغندي + ذهبي + برغندي */
+.hero-bg-img::after {
+  left: clamp(-52px, -4vw, -38px) !important;
+ top: 80px !important;
+  background:
+    radial-gradient(circle at 30px 55px, var(--burgundy) 0 24px, transparent 25px),
+    radial-gradient(circle at 78px 30px, var(--gold) 0 26px, transparent 27px),
+    radial-gradient(circle at 86px 82px, var(--burgundy) 0 20px, transparent 21px),
+    linear-gradient(var(--gold), var(--gold)),
+    linear-gradient(var(--gold), var(--gold)),
+    linear-gradient(var(--gold), var(--gold)) !important;
+  background-size:
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    2px 62px,
+    2px 64px,
+    2px 58px !important;
+  background-position:
+    0 0,
+    0 0,
+    0 0,
+    30px 78px,
+    78px 56px,
+    86px 102px !important;
+  background-repeat: no-repeat !important;
+}
+
+.hero-body {
+  max-width: min(72vw, 900px);
+  padding-top: clamp(3.2rem, 6vw, 5rem);
+}
+
+.hero-h1 {
+  font-size: clamp(2.4rem, 5.5vw, 5rem);
+}
+
+.saved-teams-summary {
+  max-width: min(620px, 70vw);
+}
+
+/* ---------- Game pages: لا نقص المحتوى، بس نخليه مرتب ---------- */
+body.game-page {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body.game-page .back-bar {
+  padding: clamp(0.45rem, 1.2vw, 0.85rem) clamp(0.75rem, 2vw, 1.25rem) !important;
+}
+
+body.game-page .game-panel,
+body.game-page .game-area {
+  width: min(100%, 1120px);
+  margin-inline: auto;
+  padding: clamp(0.75rem, 2vw, 2rem) clamp(0.75rem, 2vw, 1.5rem) !important;
+}
+
+body.game-page .panel-inner {
+  padding: clamp(1rem, 2.4vw, 2.2rem) !important;
+}
+
+body.game-page .panel-title {
+  font-size: clamp(1.45rem, 2.8vw, 2rem) !important;
+}
+
+body.game-page .act-btn,
+body.game-page .next-btn,
+body.game-page .restart-btn,
+body.game-page .back-btn,
+body.game-page .score-pill {
+  font-size: clamp(0.78rem, 1.4vw, 0.95rem) !important;
+}
+
+/* Memory */
+body.game-page .mem-grid {
+  width: fit-content;
+  max-width: 100%;
+}
+
+body.game-page .mem-grid.easy {
+  grid-template-columns: repeat(4, clamp(76px, 9vw, 120px)) !important;
+}
+
+body.game-page .mem-grid.hard {
+  grid-template-columns: repeat(4, clamp(70px, 8.4vw, 110px)) !important;
+}
+
+/* Honeycomb */
+body.game-page .hex-wrap {
+  max-width: min(620px, 94vw) !important;
+  padding: clamp(1rem, 2.5vw, 2rem) !important;
+}
+
+body.game-page .hex-cell {
+  width: clamp(40px, 5.4vw, 58px) !important;
+  height: clamp(46px, 6.2vw, 64px) !important;
+}
+
+body.game-page .hex-letter {
+  font-size: clamp(1rem, 2vw, 1.45rem) !important;
+}
+
+/* Blind image */
+body.game-page .game-area {
+  max-width: 900px;
+}
+
+body.game-page .cards-row {
+  align-items: stretch;
+}
+
+body.game-page .team-section {
+  min-width: min(240px, 44vw);
+  max-width: clamp(240px, 30vw, 310px);
+}
+
+body.game-page .flip-card {
+  max-height: none !important;
+}
+
+/* Video */
+body.game-page .vid-player {
+  max-height: min(52vh, 430px) !important;
+}
+
+/* Mafia */
+body.game-page .mafia-card {
+  width: clamp(170px, 22vw, 220px) !important;
+  height: clamp(230px, 30vw, 300px) !important;
+}
+
+/* ---------- iPad / Tablets ---------- */
+@media (min-width: 701px) and (max-width: 1100px) {
+  .hero {
+    min-height: 650px;
+  }
+
+  .hero::before {
+    inset: 1.4rem 2rem auto;
+    height: 520px;
+  }
+
+  .hero-bg-img {
+    width: clamp(240px, 26vw, 300px) !important;
+    height: clamp(320px, 36vw, 400px) !important;
+    left: 1.2rem !important;
+    bottom: 2.4rem !important;
+  }
+
+  .hero-body {
+    max-width: 680px;
+    margin-inline: auto 4.5rem;
+    padding-top: 4rem;
+  }
+
+  .hero-body::after {
+    left: 6%;
+    transform: scale(0.9);
+    transform-origin: left top;
+  }
+
+  .hero-h1 {
+    font-size: clamp(3rem, 6vw, 4.3rem);
+  }
+
+  .pills-row {
+    gap: 0.7rem;
+  }
+
+  .pill,
+  .change-teams-btn {
+    padding: 0.7rem 1.1rem;
+  }
+
+  .saved-teams-summary {
+    max-width: 560px;
+  }
+}
+
+/* ---------- Phones ---------- */
+@media (max-width: 700px) {
+  body {
+    background: linear-gradient(180deg, var(--white), var(--cream));
+  }
+
+  .hero {
+    min-height: auto;
+    padding: 1rem 0.75rem 2rem;
+  }
+
+  .hero::before {
+    inset: 0.75rem;
+    height: auto;
+    bottom: 0.75rem;
+    border-radius: 34px;
+  }
+
+  .hero::after {
+    top: 1.3rem;
+    right: 1.2rem;
+    font-size: 1.35rem;
+    letter-spacing: 0.25rem;
+  }
+
+  .hero-bg-img {
+    width: min(62vw, 220px) !important;
+    height: min(78vw, 280px) !important;
+    left: 50% !important;
+    bottom: 1.1rem !important;
+    transform: translateX(-50%) !important;
+    opacity: 0.16 !important;
+    z-index: 0 !important;
+  }
+
+  .hero-bg-img::after {
+    transform: scale(0.65) !important;
+    transform-origin: left top !important;
+    left: -34px !important;
+    top: 24px !important;
+  }
+
+  .hero-body {
+    max-width: 100%;
+    padding: 3.2rem 0.75rem 1.5rem;
+  }
+
+  .hero-body::after {
+    display: none !important;
+  }
+
+  .hero-h1 {
+    font-size: clamp(2rem, 11vw, 3rem);
+    line-height: 1.2;
+  }
+
+  .pills-row {
+    gap: 0.55rem;
+  }
+
+  .pill,
+  .change-teams-btn {
+    padding: 0.62rem 0.9rem;
+    font-size: 0.82rem;
+  }
+
+  .saved-teams-summary {
+    max-width: 100%;
+    grid-template-columns: 1fr;
+  }
+
+  .menu-section {
+    padding: 2rem 1rem 1rem;
+  }
+
+  .menu-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .menu-btn {
+    min-height: 170px;
+    border-radius: 22px;
+  }
+
+  .mb-icon {
+    font-size: 2.6rem;
+  }
+
+  /* games on phone */
+  body.game-page .back-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  body.game-page .score-pills {
+    justify-content: center;
+  }
+
+  body.game-page .panel-inner {
+    border-radius: 24px;
+  }
+
+  body.game-page .panel-head {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  body.game-page .mem-grid.easy,
+  body.game-page .mem-grid.hard {
+    grid-template-columns: repeat(4, minmax(54px, 1fr)) !important;
+    gap: 8px !important;
+    padding: 0.8rem !important;
+  }
+
+  body.game-page .hex-row {
+    gap: 7px !important;
+    margin-bottom: 7px !important;
+  }
+
+  body.game-page .hex-cell {
+    width: clamp(36px, 11vw, 46px) !important;
+    height: clamp(42px, 12vw, 52px) !important;
+  }
+
+  body.game-page .cards-row {
+    flex-wrap: nowrap;
+    gap: 0.65rem !important;
+  }
+
+  body.game-page .team-section {
+    min-width: 0;
+    max-width: none;
+    flex: 1;
+  }
+
+  body.game-page .points-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  body.game-page .divider-v {
+    display: none;
+  }
+}
+
+@media (max-width: 430px) {
+  .menu-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-h1 {
+    font-size: 2rem;
+  }
+
+  body.game-page .cards-row {
+    flex-direction: column;
+  }
+}
+/* ===== BALLOONS ONLY - HEADER ===== */
+
+.hero-bg-img::after {
+  content: "" !important;
+  position: absolute !important;
+  left: -45px !important;
+  top: 35px !important;
+  width: 120px !important;
+  height: 180px !important;
+
+  background:
+    radial-gradient(circle at 30px 55px, #7B1D35 0 24px, transparent 25px),
+    radial-gradient(circle at 78px 30px, #C9933A 0 26px, transparent 27px),
+    radial-gradient(circle at 86px 82px, #7B1D35 0 20px, transparent 21px),
+    linear-gradient(#C9933A, #C9933A),
+    linear-gradient(#C9933A, #C9933A),
+    linear-gradient(#C9933A, #C9933A) !important;
+
+  background-size:
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    2px 62px,
+    2px 64px,
+    2px 58px !important;
+
+  background-position:
+    0 0,
+    0 0,
+    0 0,
+    30px 78px,
+    78px 56px,
+    86px 102px !important;
+
+  background-repeat: no-repeat !important;
+  display: block !important;
+  opacity: 1 !important;
+  z-index: 4 !important;
+}
+/* =========================================================
+   FIX — Blind Image + Memory Image Sizes
+   الصقيه آخر Style.css
+   ========================================================= */
+
+/* ---------- Blind Image Page ---------- */
+
+.game-area {
+  width: min(100%, 1050px);
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.game-intro {
+  max-width: 720px;
+  margin: 0 auto 1.5rem;
+}
+
+.round-badge-center,
+.category-label {
+  text-align: center;
+  margin: 0.4rem auto;
+  font-weight: 900;
+}
+
+/* كروت الصور */
+.cards-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(260px, 330px));
+  justify-content: center;
+  align-items: start;
+  gap: 1.5rem;
+  margin: 1.5rem auto 2rem;
+}
+
+.team-section {
+  width: 100%;
+  max-width: 330px;
+  text-align: center;
+}
+
+.team-label {
+  display: inline-block;
+  margin-bottom: 0.7rem;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  background: #FFFFFF;
+  border: 1px solid rgba(201, 147, 58, 0.28);
+  color: #7B1D35;
+  font-weight: 900;
+}
+
+.flip-card {
+  width: 100%;
+  height: 360px;
+  perspective: 1000px;
+}
+
+.flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.45s ease;
+}
+
+.flip-card.revealed .flip-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-front,
+.flip-back {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 24px;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.flip-front {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  background: linear-gradient(135deg, #5C1228, #7B1D35);
+  color: #FFFFFF;
+  font-weight: 900;
+}
+
+.flip-back {
+  transform: rotateY(180deg);
+  background: #FFFFFF;
+}
+
+.flip-back img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  object-position: center;
+  background: #FFFFFF;
+}
+
+/* قسم النقاط */
+.points-section {
+  width: min(100%, 760px);
+  margin: 1.5rem auto 0;
+  padding: 1.3rem;
+  background: #FFFFFF;
+  border: 1.5px solid rgba(201, 147, 58, 0.28);
+  border-radius: 24px;
+  box-shadow: 0 10px 24px rgba(123, 29, 53, 0.08);
+  text-align: center;
+}
+
+.points-title {
+  margin-bottom: 1rem;
+  color: #7B1D35;
+  font-family: 'Amiri', serif;
+  font-size: 1.35rem;
+  font-weight: 900;
+}
+
+.points-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.points-team {
+  text-align: center;
+}
+
+.points-name {
+  margin-bottom: 0.8rem;
+  font-weight: 900;
+}
+
+.points-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+}
+
+.pts-btn {
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 50%;
+  color: #FFFFFF;
+  font-size: 1.3rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.btn-plus-red,
+.btn-minus-red {
+  background: #7B1D35;
+}
+
+.btn-plus-blue,
+.btn-minus-blue {
+  background: #C9933A;
+}
+
+.pts-display {
+  min-width: 56px;
+  font-size: 2rem;
+  font-weight: 900;
+}
+
+.pts-display-red {
+  color: #7B1D35;
+}
+
+.pts-display-blue {
+  color: #C9933A;
+}
+
+.divider-v {
+  width: 1px;
+  height: 80px;
+  background: rgba(201, 147, 58, 0.28);
+}
+
+.next-btn {
+  display: block;
+  margin: 1.4rem auto 0;
+  padding: 0.8rem 1.6rem;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #E8B860, #C9933A);
+  color: #FFFFFF;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+/* ---------- Memory Page ---------- */
+
+.mem-grid {
+  width: min(100%, 560px);
+  margin: 1.5rem auto;
+  display: grid;
+  justify-content: center;
+  gap: 12px;
+}
+
+.mem-grid.easy {
+  grid-template-columns: repeat(4, 120px);
+}
+
+.mem-grid.hard {
+  grid-template-columns: repeat(4, 105px);
+}
+
+.mem-card {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: none;
+  background: transparent;
+  border-radius: 16px;
+  overflow: hidden;
+  perspective: 1000px;
+}
+
+.mem-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.45s ease;
+}
+
+.mem-card.flipped .mem-card-inner,
+.mem-card.matched .mem-card-inner {
+  transform: rotateY(180deg);
+}
+
+.mem-card-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.mem-card-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+  color: #7B1D35;
+  border: 3px solid #7B1D35;
+  font-size: 2rem;
+  font-weight: 900;
+}
+
+.mem-card-front {
+  transform: rotateY(180deg);
+  background: #FFFFFF;
+  border: 3px solid #7B1D35;
+}
+
+.mem-card-front img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 700px) {
+  .game-area {
+    padding: 1rem;
+  }
+
+  .cards-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .team-section {
+    max-width: 330px;
+    margin: 0 auto;
+  }
+
+  .flip-card {
+    height: 330px;
+  }
+
+  .points-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .divider-v {
+    display: none;
+  }
+
+  .mem-grid {
+    width: 100%;
+    gap: 8px;
+  }
+
+  .mem-grid.easy,
+  .mem-grid.hard {
+    grid-template-columns: repeat(4, minmax(60px, 1fr));
+  }
+}
+
+@media (max-width: 430px) {
+  .flip-card {
+    height: 300px;
+  }
+
+  .mem-grid.easy,
+  .mem-grid.hard {
+    grid-template-columns: repeat(4, minmax(55px, 1fr));
+  }
+}

@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>خلية الحروف</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../Style.css">
+  <link rel="stylesheet" href="../Teams.css">
+
+  <style>
+    .hex-rules {
+      max-width: 760px;
+      margin: 0 auto 1.5rem;
+      padding: 1.2rem 1.4rem;
+      border-radius: 24px;
+      background: #FFFFFF;
+      border: 1.5px solid rgba(201, 147, 58, 0.35);
+      box-shadow: 0 12px 28px rgba(123, 29, 53, 0.08);
+      text-align: right;
+    }
+
+    .hex-rules-title {
+      color: #7B1D35;
+      font-size: 1.15rem;
+      font-weight: 900;
+      margin-bottom: 0.6rem;
+    }
+
+    .hex-rules p {
+      color: #2A1520;
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1.9;
+      margin-bottom: 0.35rem;
+    }
+
+    .hex-rules strong {
+      color: #7B1D35;
+      font-weight: 900;
+    }
+
+    .gold-text {
+      color: #C9933A;
+      font-weight: 900;
+    }
+
+    .hex-team-directions {
+      max-width: 760px;
+      margin: 0 auto 1rem;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.9rem;
+    }
+
+    .hex-team-card {
+      background: #FFFFFF;
+      border: 1.5px solid rgba(201, 147, 58, 0.35);
+      border-radius: 22px;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 10px 24px rgba(123, 29, 53, 0.07);
+    }
+
+    .hex-team-name {
+      color: #7B1D35;
+      font-size: 1.05rem;
+      font-weight: 900;
+      margin-bottom: 0.45rem;
+    }
+
+    .hex-team-path {
+      color: #C9933A;
+      font-size: 0.9rem;
+      font-weight: 900;
+      line-height: 1.7;
+    }
+
+    .turn-badge {
+      margin-top: 0.8rem;
+    }
+
+    @media (max-width: 700px) {
+      .hex-team-directions {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body class="game-page">
+
+  <div class="back-bar">
+    <button class="back-btn" onclick="location.href='../index.html'">🏠 الرئيسية</button>
+
+    <div class="score-pills">
+      <span class="score-pill red-pill" id="scorePill1">الفريق الأول: 0</span>
+      <span class="score-pill blue-pill" id="scorePill2">الفريق الثاني: 0</span>
+    </div>
+  </div>
+
+  <section class="game-panel" id="hexSection">
+    <div class="panel-inner">
+
+      <div class="hex-header">
+        <h3 class="panel-title">🍯 خلية الحروف</h3>
+
+        <div class="hex-rules">
+          <div class="hex-rules-title">📌 شرح اللعبة</div>
+
+          <p>
+            كل فريق يختار حرف ويجاوب على السؤال.
+            <strong>الفريق اللي يجاوب صح يملك الحرف، وهو اللي يختار الحرف اللي بعده.</strong>
+          </p>
+
+          <p>
+            عشان يفوز الفريق لازم يكوّن خط كامل حسب اتجاهه. الفريق اللي يكمل الخط أول هو الفايز.
+          </p>
+
+          <p>
+            إذا امتلأت كل الحروف وما اكتمل خط، نحسب عدد الحروف، والفريق اللي عنده حروف أكثر يفوز.
+          </p>
+        </div>
+
+        <div class="hex-team-directions">
+          <div class="hex-team-card">
+            <div class="hex-team-name" id="hexRedTeamName">الفريق الأول</div>
+            <div class="hex-team-path">هدفه: خط كامل بالعرض<br>من اليمين إلى اليسار</div>
+          </div>
+
+          <div class="hex-team-card">
+            <div class="hex-team-name" id="hexBlueTeamName">الفريق الثاني</div>
+            <div class="hex-team-path">هدفه: خط كامل بالطول<br>من فوق إلى تحت</div>
+          </div>
+        </div>
+
+        <div id="hexTurn" class="turn-badge red">دور الفريق الأول</div>
+      </div>
+
+      <div class="hex-qbox" id="hexQuestion">
+        <div class="hex-qletter" id="hexQletter">أ</div>
+
+        <p class="hex-qtext" id="hexQtext"></p>
+        <p class="hex-qanswer" id="hexQanswer"></p>
+
+        <div class="hex-qbtns">
+          <button class="act-btn gold" onclick="showAnswer()">👁️ الجواب</button>
+
+          <button class="act-btn red" id="claimRedBtn" onclick="claimHex('red')">
+            أجاب صح — الفريق الأول
+          </button>
+
+          <button class="act-btn blue" id="claimBlueBtn" onclick="claimHex('blue')">
+            أجاب صح — الفريق الثاني
+          </button>
+
+          <button class="act-btn ghost" onclick="claimHex(null)">⏭️ تجاوز</button>
+        </div>
+      </div>
+
+      <div class="hex-wrap">
+        <div class="hex-edge top-edge" id="edgeTop">فوق</div>
+        <div class="hex-edge bot-edge" id="edgeBottom">تحت</div>
+        <div class="hex-edge right-edge" id="edgeRight">←</div>
+        <div class="hex-edge left-edge" id="edgeLeft">→</div>
+
+        <div id="hexGrid"></div>
+      </div>
+
+      <div class="hex-win" id="hexWinMsg">
+        <p class="hex-win-text"></p>
+      </div>
+
+      <div class="panel-actions">
+        <button class="act-btn primary" onclick="resetHoneycomb()">🔄 لعبة جديدة</button>
+
+        <button class="act-btn red" id="hexScoreBtnRed" onclick="hexScore(1)">
+          +١ للفريق الأول
+        </button>
+
+        <button class="act-btn blue" id="hexScoreBtnBlue" onclick="hexScore(2)">
+          +١ للفريق الثاني
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+    var scores = [0, 0];
+
+    function getStoredTeamNames() {
+      try {
+        return JSON.parse(localStorage.getItem("eidTeamNames") || '["الفريق الأول","الفريق الثاني"]');
+      } catch (e) {
+        return ["الفريق الأول", "الفريق الثاني"];
+      }
+    }
+
+    function getTeamName(color) {
+      var names = getStoredTeamNames();
+
+      if (color === "red" || color === 1) {
+        return names[0] || "الفريق الأول";
+      }
+
+      if (color === "blue" || color === 2) {
+        return names[1] || "الفريق الثاني";
+      }
+
+      return "الفريق";
+    }
+
+    function loadData() {
+      try {
+        var s = localStorage.getItem("eidScores");
+
+        if (s) {
+          scores = JSON.parse(s);
+        }
+
+        if (!Array.isArray(scores) || scores.length < 2) {
+          scores = [0, 0];
+        }
+      } catch (e) {
+        scores = [0, 0];
+      }
+
+      updateScoreText();
+      updateHoneycombButtons();
+      updateDirectionNames();
+    }
+
+    function saveScores() {
+      localStorage.setItem("eidScores", JSON.stringify(scores));
+      updateScoreText();
+      updateHoneycombButtons();
+    }
+
+    function updateScoreText() {
+      var redName = getTeamName("red");
+      var blueName = getTeamName("blue");
+
+      var scorePill1 = document.getElementById("scorePill1");
+      var scorePill2 = document.getElementById("scorePill2");
+
+      if (scorePill1) {
+        scorePill1.textContent = redName + ": " + scores[0];
+      }
+
+      if (scorePill2) {
+        scorePill2.textContent = blueName + ": " + scores[1];
+      }
+    }
+
+    function updateDirectionNames() {
+      var redNameBox = document.getElementById("hexRedTeamName");
+      var blueNameBox = document.getElementById("hexBlueTeamName");
+
+      if (redNameBox) {
+        redNameBox.textContent = getTeamName("red");
+      }
+
+      if (blueNameBox) {
+        blueNameBox.textContent = getTeamName("blue");
+      }
+    }
+
+    function updateHoneycombButtons() {
+      var redName = getTeamName("red");
+      var blueName = getTeamName("blue");
+
+      var claimRedBtn = document.getElementById("claimRedBtn");
+      var claimBlueBtn = document.getElementById("claimBlueBtn");
+      var hexScoreBtnRed = document.getElementById("hexScoreBtnRed");
+      var hexScoreBtnBlue = document.getElementById("hexScoreBtnBlue");
+
+      if (claimRedBtn) {
+        claimRedBtn.textContent = "أجاب صح — " + redName;
+      }
+
+      if (claimBlueBtn) {
+        claimBlueBtn.textContent = "أجاب صح — " + blueName;
+      }
+
+      if (hexScoreBtnRed) {
+        hexScoreBtnRed.textContent = "+١ لـ " + redName;
+      }
+
+      if (hexScoreBtnBlue) {
+        hexScoreBtnBlue.textContent = "+١ لـ " + blueName;
+      }
+
+      updateDirectionNames();
+    }
+
+    function hexScore(team) {
+      scores[team - 1]++;
+      saveScores();
+    }
+  </script>
+
+  <script src="../js/Honeycomb.JS"></script>
+
+  <script>
+    function getActiveHoneycombTurn() {
+      try {
+        if (typeof currentTeam !== "undefined") return currentTeam;
+      } catch (e) {}
+
+      try {
+        if (typeof currentTurn !== "undefined") return currentTurn;
+      } catch (e) {}
+
+      return "red";
+    }
+
+    function setActiveHoneycombTurn(team) {
+      try {
+        currentTeam = team;
+      } catch (e) {}
+
+      try {
+        currentTurn = team;
+      } catch (e) {}
+
+      updateTurnDisplay();
+    }
+
+    function isHoneycombGameOver() {
+      try {
+        if (hexGameOver) return true;
+      } catch (e) {}
+
+      try {
+        if (gameOver) return true;
+      } catch (e) {}
+
+      return false;
+    }
+
+    function setHoneycombGameOver(value) {
+      try {
+        hexGameOver = value;
+      } catch (e) {}
+
+      try {
+        gameOver = value;
+      } catch (e) {}
+    }
+
+    function updateTurnDisplay() {
+      var el = document.getElementById("hexTurn");
+      if (!el) return;
+
+      var activeTurn = getActiveHoneycombTurn();
+
+      if (activeTurn === "red") {
+        el.textContent = "دور " + getTeamName("red");
+        el.className = "turn-badge red";
+      } else {
+        el.textContent = "دور " + getTeamName("blue");
+        el.className = "turn-badge blue";
+      }
+
+      updateHoneycombButtons();
+    }
+
+    function countOwnedLetters() {
+      var result = {
+        red: 0,
+        blue: 0,
+        total: 0,
+        owned: 0
+      };
+
+      try {
+        Object.values(hexState).forEach(function(cell) {
+          result.total++;
+
+          if (cell.owner) {
+            result.owned++;
+
+            if (cell.owner === "red") {
+              result.red++;
+            }
+
+            if (cell.owner === "blue") {
+              result.blue++;
+            }
+          }
+        });
+      } catch (e) {}
+
+      return result;
+    }
+
+    function isBoardFull() {
+      var counts = countOwnedLetters();
+      return counts.total > 0 && counts.owned === counts.total;
+    }
+
+    function showCountWinner() {
+      var counts = countOwnedLetters();
+
+      var msg = document.getElementById("hexWinMsg");
+      var text = msg ? msg.querySelector(".hex-win-text") : null;
+
+      if (!msg || !text) return;
+
+      msg.style.display = "block";
+
+      if (counts.red > counts.blue) {
+        text.textContent =
+          "🎉 انتهت الحروف! فاز " +
+          getTeamName("red") +
+          " بعدد حروف أكثر: " +
+          counts.red +
+          " مقابل " +
+          counts.blue;
+      } else if (counts.blue > counts.red) {
+        text.textContent =
+          "🎉 انتهت الحروف! فاز " +
+          getTeamName("blue") +
+          " بعدد حروف أكثر: " +
+          counts.blue +
+          " مقابل " +
+          counts.red;
+      } else {
+        text.textContent =
+          "⚖️ انتهت الحروف والنتيجة تعادل! كل فريق عنده " +
+          counts.red +
+          " حروف";
+      }
+
+      msg.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest"
+      });
+    }
+
+    function showLineWinner(winner) {
+      var msg = document.getElementById("hexWinMsg");
+      var text = msg ? msg.querySelector(".hex-win-text") : null;
+
+      if (!msg || !text) return;
+
+      msg.style.display = "block";
+
+      if (winner === "red") {
+        text.textContent =
+          "🎉 فاز " +
+          getTeamName("red") +
+          " وربط الخلية بخط كامل بالعرض من اليمين إلى اليسار!";
+      } else {
+        text.textContent =
+          "🎉 فاز " +
+          getTeamName("blue") +
+          " وربط الخلية بخط كامل بالطول من فوق إلى تحت!";
+      }
+
+      msg.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest"
+      });
+    }
+
+    /*
+      الفريق اللي يجاوب صح هو اللي يكمل ويختار الحرف التالي.
+      زر تجاوز فقط يبدّل الدور.
+    */
+    function claimHex(team) {
+      if (isHoneycombGameOver()) return;
+
+      if (!selectedHexId) {
+        alert("اختاري خلية أولاً");
+        return;
+      }
+
+      var data = hexState[selectedHexId];
+      var cell = document.getElementById("hex-" + selectedHexId);
+
+      if (!data || !cell) return;
+
+      if (team === null) {
+        selectedHexId = null;
+
+        if (typeof hideQuestionBox === "function") {
+          hideQuestionBox();
+        }
+
+        if (typeof switchTurn === "function") {
+          switchTurn();
+        } else {
+          var activeTurn = getActiveHoneycombTurn();
+          setActiveHoneycombTurn(activeTurn === "red" ? "blue" : "red");
+        }
+
+        updateTurnDisplay();
+        return;
+      }
+
+      data.owner = team;
+
+      cell.classList.remove("selected");
+      cell.classList.add(team === "red" ? "owned-red" : "owned-blue");
+      cell.disabled = true;
+
+      if (typeof hideQuestionBox === "function") {
+        hideQuestionBox();
+      }
+
+      if (typeof checkHexWinner === "function" && checkHexWinner(team)) {
+        setHoneycombGameOver(true);
+        showLineWinner(team);
+        return;
+      }
+
+      if (isBoardFull()) {
+        setHoneycombGameOver(true);
+        showCountWinner();
+        return;
+      }
+
+      selectedHexId = null;
+
+      setActiveHoneycombTurn(team);
+    }
+
+    function endGame(winner) {
+      setHoneycombGameOver(true);
+      showLineWinner(winner);
+    }
+
+    window.addEventListener("load", function () {
+      loadData();
+      updateHoneycombButtons();
+      updateDirectionNames();
+
+      if (typeof initHoneycomb === "function") {
+        initHoneycomb();
+      }
+
+      updateTurnDisplay();
+    });
+  </script>
+
+</body>
+</html>

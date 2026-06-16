@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لعبة المافيا</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../Style.css">
+  <link rel="stylesheet" href="../Teams.css">
+</head>
+<body class="game-page">
+
+<div class="back-bar">
+  <button class="back-btn" onclick="location.href='../index.html'">🏠 الرئيسية</button>
+</div>
+
+<section class="game-panel" id="mafiaSection">
+  <div class="panel-inner">
+    <div class="panel-head">
+      <div class="panel-icon-wrap" style="background:#FFEAEA">🕵️</div>
+      <div class="panel-head-text">
+        <h3 class="panel-title">لعبة المافيا</h3>
+        <p class="panel-sub">كل لاعب يشوف بطاقته بسرية تامة</p>
+      </div>
+    </div>
+
+    <div id="mafiaSetup">
+      <p class="mafia-step-label">اختر عدد اللاعبين</p>
+      <div class="mafia-count-row">
+        <button class="mafia-count-btn" onclick="mafiaChangeCount(-1)">−</button>
+        <span class="mafia-count-num" id="mafiaCount">8</span>
+        <button class="mafia-count-btn" onclick="mafiaChangeCount(1)">+</button>
+      </div>
+      <div class="mafia-roles-preview" id="mafiaRolesPreview"></div>
+      <button class="act-btn primary mafia-start-btn" onclick="mafiaStart()">🃏 وزّع البطاقات</button>
+    </div>
+
+    <div id="mafiaCards" style="display:none">
+      <p class="mafia-step-label" id="mafiaCardLabel">اللاعب ١ — اضغط لتشوف بطاقتك</p>
+      <div class="mafia-card-wrap" id="mafiaCardWrap">
+        <div class="mafia-card back" id="mafiaCardBack" onclick="mafiaFlip()">
+          <div class="mafia-card-back-inner">
+            <span class="mafia-card-icon-back">🎴</span>
+            <p class="mafia-card-back-txt">اضغط لتشوف دورك</p>
+          </div>
+        </div>
+        <div class="mafia-card front" id="mafiaCardFront" style="display:none">
+          <div class="mafia-card-front-inner" id="mafiaCardContent"></div>
+        </div>
+      </div>
+      <div class="mafia-card-btns" id="mafiaCardBtns" style="display:none">
+        <button class="act-btn primary" onclick="mafiaNext()">✅ فهمت — اللاعب التالي</button>
+      </div>
+      <div class="mafia-done" id="mafiaDone" style="display:none">
+        <p class="mafia-done-text">🎭 تم توزيع جميع البطاقات!</p>
+        <p class="mafia-done-sub">أغمضوا عيونكم وابدأوا اللعبة</p>
+        <button class="act-btn primary" onclick="mafiaReset()">🔄 جولة جديدة</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+var mafiaPlayerCount = 8;
+var mafiaOrder = [];
+var mafiaCurrentPlayer = 0;
+var mafiaRevealed = false;
+
+var ROLES = {
+  mafia:   { label: 'مافيا',  icon: '🔫', color: '#CC2828', bg: '#FFF0F0', desc: 'أنت مافيا! تعاون مع المافيا الآخر بسرية.' },
+  doctor:  { label: 'دكتور', icon: '💉', color: '#2878CC', bg: '#EEF4FF', desc: 'أنت الدكتور! تقدر تنقذ شخص واحد كل ليلة.' },
+  citizen: { label: 'مواطن', icon: '👤', color: '#5A3D00', bg: '#FDF5E0', desc: 'أنت مواطن! ساعد الجمهور يكشف المافيا.' }
+};
+
+function mafiaChangeCount(delta) {
+  mafiaPlayerCount = Math.min(20, Math.max(6, mafiaPlayerCount + delta));
+  document.getElementById('mafiaCount').textContent = mafiaPlayerCount;
+  mafiaUpdatePreview();
+}
+
+function mafiaUpdatePreview() {
+  var citizens = mafiaPlayerCount - 3;
+  document.getElementById('mafiaRolesPreview').innerHTML =
+    '<div class="role-preview-row">' +
+    '<span class="role-chip" style="background:#FFF0F0;color:#CC2828">🔫 مافيا × 2</span>' +
+    '<span class="role-chip" style="background:#EEF4FF;color:#2878CC">💉 دكتور × 1</span>' +
+    '<span class="role-chip" style="background:#FDF5E0;color:#5A3D00">👤 مواطن × ' + citizens + '</span>' +
+    '</div>';
+}
+
+function mafiaStart() {
+  var roles = ['mafia','mafia','doctor'];
+  for (var i = 0; i < mafiaPlayerCount - 3; i++) roles.push('citizen');
+  for (var i = roles.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = roles[i]; roles[i] = roles[j]; roles[j] = tmp;
+  }
+  mafiaOrder = roles;
+  mafiaCurrentPlayer = 0;
+  mafiaRevealed = false;
+  document.getElementById('mafiaSetup').style.display = 'none';
+  document.getElementById('mafiaCards').style.display = 'block';
+  document.getElementById('mafiaDone').style.display  = 'none';
+  mafiaShowCard();
+}
+
+function mafiaShowCard() {
+  document.getElementById('mafiaCardLabel').textContent =
+    'اللاعب ' + (mafiaCurrentPlayer + 1) + ' من ' + mafiaOrder.length + ' — اضغط لتشوف دورك';
+  document.getElementById('mafiaCardBack').style.display  = 'flex';
+  document.getElementById('mafiaCardFront').style.display = 'none';
+  document.getElementById('mafiaCardBtns').style.display  = 'none';
+  mafiaRevealed = false;
+}
+
+function mafiaFlip() {
+  if (mafiaRevealed) return;
+  mafiaRevealed = true;
+  var role = ROLES[mafiaOrder[mafiaCurrentPlayer]];
+  document.getElementById('mafiaCardContent').innerHTML =
+    '<div class="mafia-role-icon" style="background:' + role.bg + ';color:' + role.color + '">' + role.icon + '</div>' +
+    '<p class="mafia-role-label" style="color:' + role.color + '">' + role.label + '</p>' +
+    '<p class="mafia-role-desc">' + role.desc + '</p>';
+  var front = document.getElementById('mafiaCardFront');
+  front.style.background   = role.bg;
+  front.style.borderColor  = role.color + '55';
+  front.style.display      = 'flex';
+  document.getElementById('mafiaCardBack').style.display = 'none';
+  document.getElementById('mafiaCardBtns').style.display = 'flex';
+}
+
+function mafiaNext() {
+  mafiaCurrentPlayer++;
+  if (mafiaCurrentPlayer >= mafiaOrder.length) {
+    document.getElementById('mafiaCardWrap').style.display  = 'none';
+    document.getElementById('mafiaCardBtns').style.display  = 'none';
+    document.getElementById('mafiaCardLabel').textContent   = '';
+    document.getElementById('mafiaDone').style.display      = 'block';
+  } else {
+    mafiaShowCard();
+  }
+}
+
+function mafiaReset() {
+  mafiaPlayerCount = 8;
+  document.getElementById('mafiaCount').textContent      = '8';
+  document.getElementById('mafiaSetup').style.display    = 'block';
+  document.getElementById('mafiaCards').style.display    = 'none';
+  document.getElementById('mafiaCardWrap').style.display = 'flex';
+  document.getElementById('mafiaDone').style.display     = 'none';
+  mafiaUpdatePreview();
+}
+
+window.addEventListener('load', mafiaUpdatePreview);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>من يعرف الرياكشن؟</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../Style.css">
+  <link rel="stylesheet" href="../Teams.css">
+
+  <style>
+    .vid-nav-row {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .vid-prev-btn:disabled,
+    .vid-team-btn:disabled,
+    .act-btn:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+  </style>
+</head>
+
+<body class="game-page">
+
+<div class="back-bar">
+  <button class="back-btn" onclick="location.href='../index.html'">🏠 الرئيسية</button>
+
+  <div class="score-pills">
+    <span class="score-pill red-pill" id="scorePill1">الفريق الأول: 0</span>
+    <span class="score-pill blue-pill" id="scorePill2">الفريق الثاني: 0</span>
+  </div>
+</div>
+
+<section class="game-panel" id="videoSection">
+  <div class="panel-inner">
+
+    <div class="panel-head">
+      <div class="panel-icon-wrap" style="background:#FDF5E0">🎬</div>
+
+      <div class="panel-head-text">
+        <h3 class="panel-title">من يعرف الرياكشن؟</h3>
+        <p class="panel-sub">شوف الفيديو وكمل الرياكشن </p>
+      </div>
+    </div>
+
+    <div class="vid-progress-row">
+      <span class="vid-prog-lbl" id="vidProgLabel">فيديو 1 من 13</span>
+
+      <div class="vid-prog-bar">
+        <div class="vid-prog-fill" id="vidProgFill" style="width:8%"></div>
+      </div>
+    </div>
+
+    <div class="vid-question-box">
+      <p class="vid-question-text" id="vidQuestionText">توقّع شنو  الرياكشن او كمله ! </p>
+    </div>
+
+    <div class="vid-player-wrap" id="vidPlayerWrap"></div>
+
+    <div class="vid-actions" id="vidActions">
+
+      <div class="vid-team-score-row">
+        <button class="act-btn red vid-team-btn" id="vidScoreBtnRed" onclick="vidScore(1, this)">
+          +١ للفريق الأول
+        </button>
+
+        <button class="act-btn blue vid-team-btn" id="vidScoreBtnBlue" onclick="vidScore(2, this)">
+          +١ للفريق الثاني
+        </button>
+      </div>
+
+      <div class="vid-nav-row">
+        <button class="act-btn ghost vid-prev-btn" id="vidPrevBtn" onclick="vidPrev()">
+          ➡️ الفيديو السابق
+        </button>
+
+        <button class="act-btn primary vid-next-btn" id="vidNextBtn" onclick="vidNext()">
+          الفيديو التالي ⬅️
+        </button>
+      </div>
+
+    </div>
+
+    <div class="vid-done" id="vidDone" style="display:none">
+      <p class="vid-done-emoji">🎬✨</p>
+      <p class="vid-done-text">انتهت كل الفيديوهات!</p>
+
+      <div class="vid-nav-row">
+        <button class="act-btn ghost" onclick="vidBackFromDone()">➡️ ارجع لآخر فيديو</button>
+        <button class="act-btn primary" onclick="vidReset()">🔄 من البداية</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+var VID = {
+  current: 0,
+  total: 13,
+  scored: [],
+  questions: [
+    "شنو الرياكشن ؟",
+      "شنو الرياكشن ؟",
+        "شنو الرياكشن ؟",
+          "شنو الرياكشن ؟",
+          
+            "شنو الرياكشن ؟",
+              "شنو الرياكشن ؟",
+                "شنو الرياكشن ؟",
+                  "شنو الرياكشن ؟",
+                    "شنو الرياكشن ؟",
+                      "شنو الرياكشن ؟",
+                        "شنو الرياكشن ؟",
+                          "شنو الرياكشن ؟",
+                            "شنو الرياكشن ؟",
+
+  ]
+};
+
+var scores = [0, 0];
+
+/* =========================
+   أسماء الفرق والنقاط
+   ========================= */
+
+function getStoredTeamNames() {
+  try {
+    return JSON.parse(localStorage.getItem("eidTeamNames") || '["الفريق الأول","الفريق الثاني"]');
+  } catch (e) {
+    return ["الفريق الأول", "الفريق الثاني"];
+  }
+}
+
+function getTeamName(team) {
+  var names = getStoredTeamNames();
+
+  if (team === 1 || team === "red") {
+    return names[0] || "الفريق الأول";
+  }
+
+  if (team === 2 || team === "blue") {
+    return names[1] || "الفريق الثاني";
+  }
+
+  return "الفريق";
+}
+
+function loadData() {
+  try {
+    var savedScores = localStorage.getItem("eidScores");
+
+    if (savedScores) {
+      scores = JSON.parse(savedScores);
+    }
+
+    if (!Array.isArray(scores) || scores.length < 2) {
+      scores = [0, 0];
+    }
+  } catch (e) {
+    scores = [0, 0];
+  }
+
+  VID.scored = Array(VID.total).fill(false);
+
+  updateScoreText();
+  updateVideoScoreButtons();
+}
+
+function saveScores() {
+  localStorage.setItem("eidScores", JSON.stringify(scores));
+  updateScoreText();
+  updateVideoScoreButtons();
+}
+
+function updateScoreText() {
+  var scorePill1 = document.getElementById("scorePill1");
+  var scorePill2 = document.getElementById("scorePill2");
+
+  if (scorePill1) {
+    scorePill1.textContent = getTeamName(1) + ": " + scores[0];
+  }
+
+  if (scorePill2) {
+    scorePill2.textContent = getTeamName(2) + ": " + scores[1];
+  }
+}
+
+function updateVideoScoreButtons() {
+  var redBtn = document.getElementById("vidScoreBtnRed");
+  var blueBtn = document.getElementById("vidScoreBtnBlue");
+
+  if (redBtn) {
+    redBtn.textContent = "+١ لـ " + getTeamName(1);
+  }
+
+  if (blueBtn) {
+    blueBtn.textContent = "+١ لـ " + getTeamName(2);
+  }
+}
+
+function updateVideoButtonsState() {
+  var prevBtn = document.getElementById("vidPrevBtn");
+  var nextBtn = document.getElementById("vidNextBtn");
+  var alreadyScored = VID.scored[VID.current];
+
+  if (prevBtn) {
+    prevBtn.disabled = VID.current === 0;
+  }
+
+  if (nextBtn) {
+    nextBtn.textContent =
+      VID.current >= VID.total - 1 ? "✅ إنهاء" : "الفيديو التالي ⬅️";
+  }
+
+  document.querySelectorAll(".vid-team-btn").forEach(function(button) {
+    button.disabled = alreadyScored;
+  });
+}
+
+function vidScore(team, btn) {
+  if (VID.scored[VID.current]) return;
+
+  scores[team - 1]++;
+  VID.scored[VID.current] = true;
+
+  saveScores();
+  updateVideoButtonsState();
+
+  if (btn) {
+    btn.style.transform = "scale(1.15)";
+    setTimeout(function() {
+      btn.style.transform = "";
+    }, 200);
+  }
+}
+
+/* =========================
+   تشغيل الفيديوهات
+   ========================= */
+
+function makeVideoPath(index) {
+  return "../Videos/" + (index + 1) + ".mp4";
+}
+
+function vidShowCurrent() {
+  var i = VID.current;
+  var videoPath = makeVideoPath(i);
+  var wrap = document.getElementById("vidPlayerWrap");
+
+  document.getElementById("vidActions").style.display = "block";
+  document.getElementById("vidDone").style.display = "none";
+
+  document.getElementById("vidProgLabel").textContent =
+    "فيديو " + (i + 1) + " من " + VID.total;
+
+  document.getElementById("vidProgFill").style.width =
+    Math.round(((i + 1) / VID.total) * 100) + "%";
+
+  document.getElementById("vidQuestionText").textContent =
+    VID.questions[i] || "توقّع شنو يصير في الفيديو؟";
+
+  /*
+    أهم تعديل:
+    نستخدم src مباشر داخل video ونبني عنصر جديد كل مرة.
+    هذا يمنع المتصفح من تثبيت أول فيديو.
+  */
+  wrap.innerHTML =
+    '<video id="vidPlayer" class="vid-player" controls playsinline preload="metadata" ' +
+    'src="' + videoPath + '?cache=' + Date.now() + '">' +
+    'متصفحك لا يدعم تشغيل الفيديو.' +
+    '</video>';
+
+  var video = document.getElementById("vidPlayer");
+
+  video.addEventListener("error", function() {
+    alert("الفيديو ما انفتح: " + videoPath + "\nتأكدي أن الملف موجود داخل مجلد Videos وبنفس الاسم.");
+  });
+
+  updateVideoScoreButtons();
+  updateVideoButtonsState();
+}
+
+function vidNext() {
+  var video = document.getElementById("vidPlayer");
+
+  if (video) {
+    video.pause();
+  }
+
+  if (VID.current >= VID.total - 1) {
+    document.getElementById("vidActions").style.display = "none";
+    document.getElementById("vidDone").style.display = "block";
+    return;
+  }
+
+  VID.current++;
+  vidShowCurrent();
+}
+
+function vidPrev() {
+  var video = document.getElementById("vidPlayer");
+
+  if (video) {
+    video.pause();
+  }
+
+  if (VID.current <= 0) return;
+
+  VID.current--;
+  vidShowCurrent();
+}
+
+function vidBackFromDone() {
+  document.getElementById("vidDone").style.display = "none";
+  document.getElementById("vidActions").style.display = "block";
+
+  VID.current = VID.total - 1;
+  vidShowCurrent();
+}
+
+function vidReset() {
+  VID.current = 0;
+  VID.scored = Array(VID.total).fill(false);
+
+  document.getElementById("vidDone").style.display = "none";
+  document.getElementById("vidActions").style.display = "block";
+
+  vidShowCurrent();
+}
+
+window.addEventListener("load", function() {
+  loadData();
+  vidShowCurrent();
+});
+</script>
+
+</body>
+</html>

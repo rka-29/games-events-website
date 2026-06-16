@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>فعاليات الخريجة </title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="Style.css">
+  <link rel="stylesheet" href="Teams.css">
+</head>
+
+<body>
+
+  <!-- ====== TEAM NAME MODAL ====== -->
+  <div class="team-modal" id="teamModal">
+    <div class="team-modal-box">
+
+      <div class="tm-header">
+        <div>
+          <h2 class="tm-title">إعداد الفرق</h2>
+          <p class="tm-sub">أدخل الأسماء واضغط «قسّم» للتوزيع العشوائي</p>
+        </div>
+
+        <button class="tm-close-btn" type="button" onclick="closeTeamModal()">✕</button>
+      </div>
+
+      <p class="tm-alert" id="tmAlert"></p>
+
+      <div class="tm-section-label">
+        <span>👥 اللاعبون</span>
+        <span class="tm-player-count" id="tmPlayerCount"></span>
+      </div>
+
+      <div class="tm-players-wrap" id="playersWrap"></div>
+
+      <button class="tm-add-btn" type="button" onclick="addPlayer()">＋ أضف لاعب</button>
+      <button class="tm-split-btn" type="button" onclick="splitTeams()">🎲 قسّم عشوائياً</button>
+
+      <div class="split-result" id="splitResult" style="display:none">
+        <div class="split-inner" id="splitResultInner"></div>
+        <button class="tm-split-btn ghost-split" type="button" onclick="splitTeams()">🔀 إعادة التقسيم</button>
+      </div>
+
+      <div class="tm-section-label" style="margin-top:1.4rem">
+        <span>🏷️ أسماء الفرق</span>
+      </div>
+
+      <div class="tm-team-names-row">
+        <div class="tm-team-field">
+          <span class="tm-team-dot red-dot"></span>
+          <input class="tm-input tm-team-name-input" id="teamNameInput1" placeholder="اسم الفريق الأول" maxlength="20">
+        </div>
+
+        <div class="tm-team-field">
+          <span class="tm-team-dot blue-dot"></span>
+          <input class="tm-input tm-team-name-input" id="teamNameInput2" placeholder="اسم الفريق الثاني" maxlength="20">
+        </div>
+      </div>
+
+      <button class="tm-save-btn" type="button" onclick="saveTeamNames()">✅ حفظ وابدأ الفعالية</button>
+
+    </div>
+  </div>
+
+  <!-- ====== HERO ====== -->
+  <header class="hero" id="heroSection">
+    <div class="hero-bg-img"></div>
+    <div class="hero-gold-line top"></div>
+
+    <div class="hero-body">
+      <h1 class="hero-h1">فعاليات الخريجة <br></h1>
+
+      <div class="pills-row">
+        <div class="pill pill-a" id="pill1"></div>
+        <div class="pill pill-b" id="pill2"></div>
+      </div>
+
+      <button class="change-teams-btn" type="button" onclick="initTeamSetup()">✏️ غيّر أسماء الفريقين</button>
+    </div>
+
+    <div class="hero-gold-line bot"></div>
+  </header>
+
+  <!-- ====== GAME MENU ====== -->
+  <section class="menu-section">
+    <p class="menu-eyebrow">اختر لعبة</p>
+    <h2 class="menu-h2">برنامج الفلة</h2>
+
+    <div class="menu-grid">
+
+      <button class="menu-btn" onclick="location.href='games/secret-number.html'">
+        <span class="mb-num">01</span>
+        <span class="mb-icon">🔢</span>
+        <span class="mb-name">خمّن الرقم السري</span>
+        <span class="mb-tag">ذكاء</span>
+      </button>
+
+      <button class="menu-btn highlight" onclick="location.href='games/memory.html'">
+        <span class="mb-num">02</span>
+        <span class="mb-icon">🃏</span>
+        <span class="mb-name">تطابق الصور</span>
+        <span class="mb-tag">ذاكرة</span>
+      </button>
+
+      <button class="menu-btn" onclick="location.href='games/mafia.html'">
+        <span class="mb-num">03</span>
+        <span class="mb-icon">🕵️</span>
+        <span class="mb-name">المافيا</span>
+        <span class="mb-tag">إثارة</span>
+      </button>
+
+      <button class="menu-btn" onclick="location.href='games/video.html'">
+        <span class="mb-num">04</span>
+        <span class="mb-icon">🎬</span>
+        <span class="mb-name">من يعرف الرياكشن؟</span>
+        <span class="mb-tag">مضحك</span>
+      </button>
+
+      <button class="menu-btn" onclick="location.href='games/blind-image.html'">
+        <span class="mb-num">05</span>
+        <span class="mb-icon">🖼️</span>
+        <span class="mb-name">شنو صورتك ؟</span>
+        <span class="mb-tag">بديهه</span>
+      </button>
+
+      <button class="menu-btn highlight" onclick="location.href='games/honeycomb.html'">
+        <span class="mb-num">06</span>
+        <span class="mb-icon">🍯</span>
+        <span class="mb-name">خلية الحروف</span>
+        <span class="mb-tag">استراتيجي</span>
+      </button>
+
+    </div>
+  </section>
+
+  <!-- ====== SCOREBOARD ====== -->
+  <section class="score-section">
+    <div class="score-inner">
+
+      <div class="score-top-row">
+        <h3 class="score-title">🏆 لوحة النقاط</h3>
+        <button class="ghost-btn" type="button" onclick="resetScores()">إعادة تعيين</button>
+      </div>
+
+      <div class="score-teams">
+
+        <div class="score-team" id="box1">
+          <div class="st-label" id="teamLabel1"></div>
+          <div class="st-num red-num" id="s1">0</div>
+
+          <div class="st-controls">
+            <button class="ctrl-btn" type="button" onclick="pts(1,-1)">−</button>
+            <button class="ctrl-btn" type="button" onclick="pts(1,+1)">+</button>
+          </div>
+
+          <div class="st-crown" id="l1"></div>
+        </div>
+
+        <div class="vs-badge">VS</div>
+
+        <div class="score-team" id="box2">
+          <div class="st-label" id="teamLabel2"></div>
+          <div class="st-num blue-num" id="s2">0</div>
+
+          <div class="st-controls">
+            <button class="ctrl-btn" type="button" onclick="pts(2,-1)">−</button>
+            <button class="ctrl-btn" type="button" onclick="pts(2,+1)">+</button>
+          </div>
+
+          <div class="st-crown" id="l2"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <p>See you next year or not!</p>
+  </footer>
+
+  <script src="js/Script.JS"></script>
+  <script src="js/Honeycomb.JS"></script>
+  <script src="js/Teams.JS"></script>
+
+  <script>
+    window.addEventListener('load', function () {
+      var savedNames = localStorage.getItem('eidTeamNames');
+
+      if (savedNames) {
+        teamNames = JSON.parse(savedNames);
+        applyTeamNames();
+      } else {
+        setTimeout(function () {
+          initTeamSetup();
+        }, 200);
+      }
+
+      var savedScores = localStorage.getItem('eidScores');
+
+      if (savedScores) {
+        scores = JSON.parse(savedScores);
+
+        var s1 = document.getElementById('s1');
+        var s2 = document.getElementById('s2');
+
+        if (s1) s1.textContent = scores[0];
+        if (s2) s2.textContent = scores[1];
+
+        updateLeader();
+      }
+    });
+  </script>
+
+</body>
+</html>

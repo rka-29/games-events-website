@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>صورتك عمياء</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../Style.css">
+  <link rel="stylesheet" href="../Teams.css">
+  <style>
+  .game-intro {
+    max-width: 720px;
+    margin: 0 auto 1.5rem;
+    padding: 1rem 1.3rem;
+    background: #FFFFFF;
+    border: 1.5px solid rgba(201, 147, 58, 0.35);
+    border-radius: 22px;
+    box-shadow: 0 12px 28px rgba(123, 29, 53, 0.08);
+    text-align: center;
+  }
+
+  .game-intro-title {
+    color: #7B1D35;
+    font-size: 1.1rem;
+    font-weight: 900;
+    margin-bottom: 0.4rem;
+  }
+
+  .game-intro-text {
+    color: #2A1520;
+    font-size: 0.95rem;
+    font-weight: 800;
+    line-height: 1.8;
+  }
+</style>
+</head>
+<body class="game-page">
+
+<!-- BACK BAR — نفس باقي الألعاب -->
+<div class="back-bar">
+  <button class="back-btn" onclick="location.href='../index.html'">🏠 الرئيسية</button>
+  <div class="score-pills">
+    <span class="score-pill red-pill"  id="scorePill1">الفريق الأول: 0</span>
+    <span class="score-pill blue-pill" id="scorePill2">الفريق الثاني: 0</span>
+  </div>
+</div>
+
+<!-- GAME AREA -->
+<div class="game-area">
+  <div class="game-intro">
+  <div class="game-intro-title">📌 فكرة اللعبة</div>
+  <div class="game-intro-text">
+    تعرّف على صورة فريقك، وحاول تخمّن صورة الفريق اللي جدامك.
+  </div>
+</div>
+
+  <div class="round-badge-center" id="roundBadge">الجولة <span>1</span> من 2</div>
+  <div class="category-label" id="categoryLabel">الجولة الأولى — <span>🍕 أكل</span></div>
+
+  <div class="cards-row">
+    <!-- TEAM 1 -->
+    <div class="team-section">
+      <div class="team-label label-red" id="teamName1">الفريق الأول</div>
+      <div class="flip-card" id="card1" onclick="reveal(1)">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <span class="lock-icon">🔒</span>
+            <span class="tap-hint">اضغط للكشف</span>
+          </div>
+          <div class="flip-back">
+            <img id="cardImg1" src="" alt="صورة الفريق الأول">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TEAM 2 -->
+    <div class="team-section">
+      <div class="team-label label-blue" id="teamName2">الفريق الثاني</div>
+      <div class="flip-card" id="card2" onclick="reveal(2)">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <span class="lock-icon">🔒</span>
+            <span class="tap-hint">اضغط للكشف</span>
+          </div>
+          <div class="flip-back">
+            <img id="cardImg2" src="" alt="صورة الفريق الثاني">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- POINTS -->
+  <div class="points-section">
+    <div class="points-title">⭐ النقاط</div>
+    <div class="points-grid">
+      <div class="points-team">
+        <div class="points-name pts-red" id="ptName1">الفريق الأول</div>
+        <div class="points-controls">
+          <button class="pts-btn btn-plus-red"  onclick="addScore(0,1)">+</button>
+          <div class="pts-display pts-display-red" id="score1">0</div>
+          <button class="pts-btn btn-minus-red" onclick="addScore(0,-1)">−</button>
+        </div>
+      </div>
+      <div class="divider-v"></div>
+      <div class="points-team">
+        <div class="points-name pts-blue" id="ptName2">الفريق الثاني</div>
+        <div class="points-controls">
+          <button class="pts-btn btn-plus-blue"  onclick="addScore(1,1)">+</button>
+          <div class="pts-display pts-display-blue" id="score2">0</div>
+          <button class="pts-btn btn-minus-blue" onclick="addScore(1,-1)">−</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="next-btn" id="nextBtn" onclick="nextRound()">الجولة التالية ←</button>
+</div>
+
+<script>
+  // ============================================
+  // غيّر أسماء الصور هنا فقط
+  var rounds = [
+    {
+      label:  'الجولة الأولى — <span>🍕 أكل</span>',
+      img1:   '../images/maxresdefault.jpg',   // صورة الفريق الأول  - جولة 1
+      img2:   '../images/taco.jpg'     // صورة الفريق الثاني - جولة 1
+    },
+    {
+      label:  'الجولة الثانية — <span>🦁 حيوانات</span>',
+      img1:   '../images/bbgaa.jpg',       // صورة الفريق الأول  - جولة 2
+      img2:   '../images/okhtbot.png'        // صورة الفريق الثاني - جولة 2
+    }
+  ];
+  // ============================================
+
+  var currentRound = 0;
+  var scores = [0, 0];
+  var names  = ['الفريق الأول', 'الفريق الثاني'];
+
+  function init() {
+    try {
+      var s = localStorage.getItem('eidScores');
+      if (s) scores = JSON.parse(s);
+      var n = localStorage.getItem('eidTeamNames');
+      if (n) names = JSON.parse(n);
+    } catch(e) {}
+    updateNames();
+    updateScoreUI();
+    loadRound();
+  }
+
+  function updateNames() {
+    document.getElementById('teamName1').textContent = names[0];
+    document.getElementById('teamName2').textContent = names[1];
+    document.getElementById('ptName1').textContent   = names[0];
+    document.getElementById('ptName2').textContent   = names[1];
+  }
+
+  function loadRound() {
+    var r = rounds[currentRound];
+    document.getElementById('categoryLabel').innerHTML = r.label;
+    document.getElementById('roundBadge').innerHTML =
+      'الجولة <span>' + (currentRound + 1) + '</span> من ' + rounds.length;
+    document.getElementById('cardImg1').src = r.img1;
+    document.getElementById('cardImg2').src = r.img2;
+    document.getElementById('card1').classList.remove('revealed');
+    document.getElementById('card2').classList.remove('revealed');
+    var isLast = currentRound === rounds.length - 1;
+    var nextBtn = document.getElementById('nextBtn');
+
+    if (isLast) {
+      nextBtn.style.display = 'none';
+    } else {
+      nextBtn.style.display = 'block';
+      nextBtn.textContent = 'الجولة التالية ←';
+    }
+  }
+
+function reveal(team) {
+    document.getElementById('card' + team).classList.toggle('revealed');
+}
+
+  function addScore(team, delta) {
+    scores[team] = Math.max(0, scores[team] + delta);
+    updateScoreUI();
+    try { localStorage.setItem('eidScores', JSON.stringify(scores)); } catch(e) {}
+  }
+
+  function updateScoreUI() {
+    document.getElementById('score1').textContent      = scores[0];
+    document.getElementById('score2').textContent      = scores[1];
+    document.getElementById('scorePill1').textContent  = names[0] + ': ' + scores[0];
+    document.getElementById('scorePill2').textContent  = names[1] + ': ' + scores[1];
+  }
+
+  function nextRound() {
+    if (currentRound < rounds.length - 1) {
+      currentRound++;
+      loadRound();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  window.addEventListener('load', init);
+</script>
+
+</body>
+</html>
